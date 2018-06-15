@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 class Uc {
     private String PC;
     private String IR;
@@ -7,16 +10,33 @@ class Uc {
     private String BX;
     private String CX;
     private String DX;
+    private Map<String, String> componentesUc =  new HashMap<String, String>();
     private String Registradores[] = {
         "AX",
         "BX",
         "CX",
         "DX",
+        "MAR",
+        "MBR",
+        "IR",
+        "PC",
+        "AX",
+        "BX",
+        "CX",
+        "DX"
     };
+    
+    private String criaComandoBinario(int decimal) {
+        return Integer.toString(decimal, 2);
+    }
 
     public Uc() {
         for (int i = 0; i < this.Registradores.length; i++) {
-            this.comandos.put(this.Registradores[i], criaComandoBinario(i + 1));
+            this.componentesUc.put(this.Registradores[i], criaComandoBinario(i + 1));
         }
+    }
+    
+    public String getComandoBinario(String componente) {
+        return this.componentesUc.get(componente);
     }
 }

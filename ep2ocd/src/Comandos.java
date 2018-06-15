@@ -29,7 +29,7 @@ class Comandos {
     } 
 
     public String getComandoBinario(String comando) {
-        return this.comandos.get("add");
+        return this.comandos.get(comando);
     }
 
     public boolean umComandoValido(String comando) {

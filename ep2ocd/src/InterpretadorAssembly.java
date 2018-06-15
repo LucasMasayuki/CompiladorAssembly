@@ -40,6 +40,7 @@ class InterpretadorAssembly {
 
     public static void compila(StringBuilder comando) {
         Comandos comandosAssembly = new Comandos();
+        Uc uc = new Uc();
         StringBuilder instrucao = new StringBuilder();
         StringBuilder binario = new StringBuilder();
         int i = 0;
@@ -53,5 +54,12 @@ class InterpretadorAssembly {
         binario.append(comandosAssembly.getComandoBinario(instrucao.toString()));
 
         comandosAssembly.imprimeTabelaOpcode();
+        
+        instrucao = new StringBuilder();
+        
+        while (comando.charAt(i) != ',') {
+        	instrucao.append(comando.charAt(i));
+            i++;
+        }
     }
 }
