@@ -2,15 +2,15 @@ class Ula {
     private String X;
     private String Y;
 
-    public setY(String binario) {
+    public void setY(String binario) {
         this.Y = binario;
     }
 
-    public setX(String binario) {
+    public void setX(String binario) {
         this.X = binario;
     }
 
-    public getResultado() {
-        return x + y;
+    public String getResultado() {
+        return X + Y;
     }
 }

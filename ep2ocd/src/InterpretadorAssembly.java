@@ -16,12 +16,24 @@ class InterpretadorAssembly {
             switch (opcao) {
 
                 case 1:
-                    System.out.println("");
-                    System.out.println("Coloque o comando em assembly que vc desejar");
-                    StringBuilder comando;
-                    String instrucao = entrada.next();
-                    comando = new StringBuilder(instrucao);
-                    compila(comando);
+                    int continuar = 0;
+                    Memoria memoria = new Memoria();
+                    while (continuar != 1) {
+                        System.out.println("");
+                        System.out.println("Coloque o comando em assembly que vc desejar");
+                        StringBuilder comando;
+                        String instrucao = entrada.next();
+                        comando = new StringBuilder(instrucao);
+                        compila(comando, memoria);
+                        System.out.println("");
+                        System.out.println("Deseja colocar mais um comando ?");
+                        System.out.println("1 - Sim");
+                        System.out.println("2 - Não");
+                        continuar = entrada.nextInt();
+                    }
+
+                    memoria.verificaEstadoDaMemoria();
+
                     break;
 
                 case 2:
@@ -38,20 +50,23 @@ class InterpretadorAssembly {
         }
     }
 
-    public static void compila(StringBuilder comando) {
+    public static void compila(StringBuilder comando, Memoria memoria) {
         Comandos comandosAssembly = new Comandos();
         Uc uc = new Uc();
         StringBuilder instrucao = new StringBuilder();
-        StringBuilder binario = new StringBuilder();
+        String opcode;
+        String operandoUm;
+        String operandoDois;
         int i = 0;
+
         instrucao.append("");
-        binario.append("");
+
         while (!comandosAssembly.umComandoValido(instrucao.toString())) {
             instrucao.append(comando.charAt(i));
             i++;
         }
 
-        binario.append(comandosAssembly.getComandoBinario(instrucao.toString()));
+        opcode = comandosAssembly.getComandoBinario(instrucao.toString());
 
         comandosAssembly.imprimeTabelaOpcode();
         
@@ -61,5 +76,22 @@ class InterpretadorAssembly {
         	instrucao.append(comando.charAt(i));
             i++;
         }
+
+        if (uc.verificaSeUmRegistradorValido(instrucao.toString())) {
+            operandoUm = uc.getComandoBinario(instrucao.toString());
+        } else {
+            operandoUm = instrucao.toString();
+        }
+
+        if (comando.length() == i - 1) {
+            Palavra palavra = new Palavra(opcode, operandoUm);
+        } else {
+            while (comando.charAt(i) != i - 1){
+                instrucao.append(comando.charAt(i));
+                i++;
+            }
+            Palavra palavra = new Palavra(opcode, operandoUm, operandoDois);
+        }
+        memoria.novoProcesso(palavra);
     }
 }

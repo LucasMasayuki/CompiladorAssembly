@@ -44,9 +44,9 @@ class Comandos {
     public void imprimeTabelaOpcode() {
         System.out.println("|Tabela opcode|");
         for (Map.Entry<String,String> comando : comandos.entrySet()) {
-            System.out.print("______________________________");
+            System.out.print("");
             System.out.println("|comando: " + comando.getKey() + " | binario: " + comando.getValue() + "|");
-            System.out.print("______________________________");
+            System.out.print("");
         }
     } 
 }
