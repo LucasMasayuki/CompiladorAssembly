@@ -21,10 +21,8 @@ class InterpretadorAssembly {
                     while (continuar != 1) {
                         System.out.println("");
                         System.out.println("Coloque o comando em assembly que vc desejar");
-                        StringBuilder comando;
-                        String instrucao = entrada.next();
-                        comando = new StringBuilder(instrucao);
-                        compila(comando, memoria);
+                        String instrucao = entrada.nextLine();
+                        compila(instrucao, memoria);
                         System.out.println("");
                         System.out.println("Deseja colocar mais um comando ?");
                         System.out.println("1 - Sim");
@@ -50,16 +48,19 @@ class InterpretadorAssembly {
         }
     }
 
-    public static void compila(StringBuilder comando, Memoria memoria) {
+    public static void compila(String entrada, Memoria memoria) {
         Comandos comandosAssembly = new Comandos();
         Uc uc = new Uc();
+        Palavra palavra;
         StringBuilder instrucao = new StringBuilder();
+        StringBuilder comando = new StringBuilder(entrada);
         String opcode;
         String operandoUm;
-        String operandoDois;
+        String operandoDois = "";
         int i = 0;
 
         instrucao.append("");
+    	System.out.println(comando);
 
         while (!comandosAssembly.umComandoValido(instrucao.toString())) {
             instrucao.append(comando.charAt(i));
@@ -71,6 +72,9 @@ class InterpretadorAssembly {
         comandosAssembly.imprimeTabelaOpcode();
         
         instrucao = new StringBuilder();
+        
+        i++;
+    	System.out.println(comando);
         
         while (comando.charAt(i) != ',') {
         	instrucao.append(comando.charAt(i));
@@ -84,13 +88,14 @@ class InterpretadorAssembly {
         }
 
         if (comando.length() == i - 1) {
-            Palavra palavra = new Palavra(opcode, operandoUm);
+            palavra = new Palavra(opcode, operandoUm);
         } else {
+        	i++;
             while (comando.charAt(i) != i - 1){
                 instrucao.append(comando.charAt(i));
                 i++;
             }
-            Palavra palavra = new Palavra(opcode, operandoUm, operandoDois);
+            palavra = new Palavra(opcode, operandoUm, operandoDois);
         }
         memoria.novoProcesso(palavra);
     }

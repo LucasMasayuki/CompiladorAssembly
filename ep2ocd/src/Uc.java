@@ -33,7 +33,7 @@ class Uc {
     }
 
     public boolean verificaSeUmRegistradorValido(String supostoRegistrador) {
-        for (int i = 0; i < this.Resgistradores.length; i++) {
+        for (int i = 0; i < this.Registradores.length; i++) {
             if (this.Registradores[i] == supostoRegistrador) {
                 return true;
             }

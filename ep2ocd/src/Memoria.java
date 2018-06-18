@@ -9,7 +9,7 @@ class Memoria {
     }
 
     public void novoProcesso(Palavra palavra){
-    	Processo processo = new Processo(enderecoEmHexadecimal(linha), palavra);
+        Processo processo = new Processo(enderecoEmHexadecimal(), palavra);
         filaDeProcesso.addLast(processo);
         this.linha++;
     }
@@ -20,9 +20,8 @@ class Memoria {
 
     public void verificaEstadoDaMemoria() {
     	for (Processo processo : filaDeProcesso) {
-    		String opcode = filaDeProcesso.palavra.getOp
-    		System.out.println("linha: " + filaDeProcesso.linha + "palavra: " + filaDeProcesso.palavra
-    			.getOpcode() + filaDeProcesso.palavra.getOperandoUm() + filaDeProcesso.palavra.getOperandoDois());
+    		System.out.println("linha: " + processo.endereco + "palavra: " + processo.palavra
+    			.getOpcode() + processo.palavra.getOperandoUm() + processo.palavra.getOperandoDois());
     	}
     }
 }
