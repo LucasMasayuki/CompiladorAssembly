@@ -16,12 +16,13 @@ class InterpretadorAssembly {
             switch (opcao) {
 
                 case 1:
-                    int continuar = 0;
+                    int continuar = 1;
                     Memoria memoria = new Memoria();
-                    while (continuar != 1) {
+                    Scanner input = new Scanner(System.in);
+                    while (continuar == 1) {
                         System.out.println("");
                         System.out.println("Coloque o comando em assembly que vc desejar");
-                        String instrucao = entrada.nextLine();
+                        String instrucao = input.nextLine();
                         compila(instrucao, memoria);
                         System.out.println("");
                         System.out.println("Deseja colocar mais um comando ?");
@@ -29,8 +30,6 @@ class InterpretadorAssembly {
                         System.out.println("2 - Não");
                         continuar = entrada.nextInt();
                     }
-
-                    memoria.verificaEstadoDaMemoria();
 
                     break;
 
@@ -60,7 +59,6 @@ class InterpretadorAssembly {
         int i = 0;
 
         instrucao.append("");
-    	System.out.println(comando);
 
         while (!comandosAssembly.umComandoValido(instrucao.toString())) {
             instrucao.append(comando.charAt(i));
@@ -74,9 +72,11 @@ class InterpretadorAssembly {
         instrucao = new StringBuilder();
         
         i++;
-    	System.out.println(comando);
         
-        while (comando.charAt(i) != ',') {
+        while ((comando.length() - 1) != i) {
+        	if (comando.charAt(i) != ',') {
+        		break;
+        	}
         	instrucao.append(comando.charAt(i));
             i++;
         }
@@ -91,12 +91,13 @@ class InterpretadorAssembly {
             palavra = new Palavra(opcode, operandoUm);
         } else {
         	i++;
-            while (comando.charAt(i) != i - 1){
+            while (comando.length() != i){
                 instrucao.append(comando.charAt(i));
                 i++;
             }
             palavra = new Palavra(opcode, operandoUm, operandoDois);
         }
         memoria.novoProcesso(palavra);
+        memoria.verificaEstadoDaMemoria();
     }
 }

@@ -5,7 +5,7 @@ class Memoria {
     private int linha = 0;
 
     private String enderecoEmHexadecimal() {
-		return Integer.toString(linha, 16);
+    	return Integer.toHexString(linha);
     }
 
     public void novoProcesso(Palavra palavra){
@@ -14,13 +14,18 @@ class Memoria {
         this.linha++;
     }
 
-    public Processo pegaProcesso(int endereco) {
-        return filaDeProcesso.get(endereco);
+    public Processo pegaProcesso(String endereco) {
+    	for (Processo processo : filaDeProcesso) {
+    		if (processo.endereco.equals(endereco)) {
+    			return processo;
+    		}
+    	}
+    	return null;
     }
 
     public void verificaEstadoDaMemoria() {
     	for (Processo processo : filaDeProcesso) {
-    		System.out.println("linha: " + processo.endereco + "palavra: " + processo.palavra
+    		System.out.println("linha: " + processo.endereco + " palavra: " + processo.palavra
     			.getOpcode() + processo.palavra.getOperandoUm() + processo.palavra.getOperandoDois());
     	}
     }

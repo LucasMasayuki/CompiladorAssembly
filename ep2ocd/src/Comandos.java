@@ -20,7 +20,7 @@ class Comandos {
 
     public Comandos() {
         for (int i = 0; i < this.assemblyComandos.length; i++) {
-            this.comandos.put(this.assemblyComandos[i], criaComandoBinario(i + 1));
+            this.comandos.put(this.assemblyComandos[i], criaComandoBinario(i));
         }
     }
 
