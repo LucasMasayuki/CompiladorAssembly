@@ -1,16 +1,16 @@
 class Ula {
-    private String X;
-    private String Y;
+    private int X;
+    private int Y;
 
-    public setY(String binario) {
+    public void setY(int binario) {
         this.Y = binario;
     }
 
-    public setX(String binario) {
+    public void setX(int binario) {
         this.X = binario;
     }
 
-    public getResultado() {
-        return x + y;
+    public int getResultado() {
+        return X + Y;
     }
 }

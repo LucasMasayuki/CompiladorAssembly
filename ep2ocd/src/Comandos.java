@@ -4,6 +4,7 @@ class Comandos {
     private Map<String, String> comandos =  new HashMap<String, String>();
     private String assemblyComandos[] = {
         "add",
+        "mov",
         "sub",
         "mul",
         "div",
@@ -20,7 +21,7 @@ class Comandos {
 
     public Comandos() {
         for (int i = 0; i < this.assemblyComandos.length; i++) {
-            this.comandos.put(this.assemblyComandos[i], criaComandoBinario(i + 1));
+            this.comandos.put(this.assemblyComandos[i], criaComandoBinario(i));
         }
     }
 
@@ -29,7 +30,7 @@ class Comandos {
     } 
 
     public String getComandoBinario(String comando) {
-        return this.comandos.get("add");
+        return this.comandos.get(comando);
     }
 
     public boolean umComandoValido(String comando) {
@@ -44,9 +45,9 @@ class Comandos {
     public void imprimeTabelaOpcode() {
         System.out.println("|Tabela opcode|");
         for (Map.Entry<String,String> comando : comandos.entrySet()) {
-            System.out.print("______________________________");
+            System.out.print("");
             System.out.println("|comando: " + comando.getKey() + " | binario: " + comando.getValue() + "|");
-            System.out.print("______________________________");
+            System.out.print("");
         }
     } 
 }
