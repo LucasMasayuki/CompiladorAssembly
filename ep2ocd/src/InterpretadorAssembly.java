@@ -29,9 +29,6 @@ class InterpretadorAssembly {
                         System.out.println("2 - Não");
                         continuar = entrada.nextInt();
                     }
- 
-                    Uc uc = new Uc();
-                    uc.cicloDeBusca();
 
                     break;
 
