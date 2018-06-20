@@ -17,19 +17,21 @@ class InterpretadorAssembly {
 
                 case 1:
                     int continuar = 1;
-                    Memoria memoria = new Memoria();
                     Scanner input = new Scanner(System.in);
                     while (continuar == 1) {
                         System.out.println("");
                         System.out.println("Coloque o comando em assembly que vc desejar");
                         String instrucao = input.nextLine();
-                        compila(instrucao, memoria);
+                        compila(instrucao);
                         System.out.println("");
                         System.out.println("Deseja colocar mais um comando ?");
                         System.out.println("1 - Sim");
                         System.out.println("2 - Não");
                         continuar = entrada.nextInt();
                     }
+ 
+                    Uc uc = new Uc();
+                    uc.cicloDeBusca();
 
                     break;
 
@@ -47,10 +49,11 @@ class InterpretadorAssembly {
         }
     }
 
-    public static void compila(String entrada, Memoria memoria) {
-        Comandos comandosAssembly = new Comandos();
-        Uc uc = new Uc();
+    public static void compila(String entrada) {
         Palavra palavra;
+        Uc uc = new Uc();
+        Memoria memoria = new Memoria();
+        Comandos comandosAssembly = new Comandos();
         StringBuilder instrucao = new StringBuilder();
         StringBuilder comando = new StringBuilder(entrada);
         String opcode;

@@ -1,4 +1,3 @@
-import java.util.Iterator;
 import java.util.LinkedList;
 class Memoria {
     private LinkedList<Processo> filaDeProcesso = new LinkedList<Processo>(); 

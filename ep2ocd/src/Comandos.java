@@ -4,6 +4,7 @@ class Comandos {
     private Map<String, String> comandos =  new HashMap<String, String>();
     private String assemblyComandos[] = {
         "add",
+        "mov",
         "sub",
         "mul",
         "div",

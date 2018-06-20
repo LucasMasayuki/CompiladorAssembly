@@ -40,4 +40,11 @@ class Uc {
         }
         return false;
     }
+    
+    public boolean cicloDeBusca() {
+    	Memoria memoria = new Memoria();
+    	if (PC.isEmpty()) {
+    		memoria.getProcesso(Integer.toHexString(0));
+    	}
+    }
 }
