@@ -1,3 +1,4 @@
+package ep2ocd;
 
 public class Palavra {
 	private String opcode;

@@ -1,3 +1,5 @@
+package ep2ocd;
+
 class InterpretadorAssembly {
 
     public static void compila(String entrada, Memoria memoria, Uc uc, Comandos comandosAssembly) {

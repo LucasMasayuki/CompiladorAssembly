@@ -1,17 +1,14 @@
-import java.awt.BorderLayout;
+package ep2ocd;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.JMenuBar;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
-import java.awt.Scrollbar;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class InterfaceKetman extends JFrame {
 
@@ -20,6 +17,7 @@ public class InterfaceKetman extends JFrame {
     private Memoria memoria = new Memoria();
     private Comandos comandosAssembly = new Comandos();
     private Uc uc = new Uc();
+	private ArrayList<String> comandos = new ArrayList<String>();
 
 	/**
 	 * Launch the application.
@@ -54,8 +52,19 @@ public class InterfaceKetman extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					String comando = textField.getText();
-					InterpretadorAssembly interpreta = new InterpretadorAssembly();
+					textField.setText("");
+
+					comandos.add(comando);
+
+					StringBuilder text = new StringBuilder();
+					for (String input : comandos) {
+						text.append(input);
+						text.append('\n');
+					}
+
 					InterpretadorAssembly.compila(comando, memoria, uc, comandosAssembly);
+					ListaDeComandos secondFrame = new ListaDeComandos(text.toString());
+					secondFrame.setVisible(true);
 				  }
 			}
 		});
@@ -64,7 +73,7 @@ public class InterfaceKetman extends JFrame {
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Coloque um comando de cada vez");
-		lblNewLabel.setBounds(49, 38, 172, 14);
+		lblNewLabel.setBounds(49, 38, 350, 14);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel1 = new JLabel("Ao final de cada comando aperte enter");
@@ -76,7 +85,7 @@ public class InterfaceKetman extends JFrame {
 		contentPane.add(lblNewLabel11);
 		
 		JButton btnExecutar = new JButton("Executar");
-		btnExecutar.setBounds(176, 196, 89, 23);
+		btnExecutar.setBounds(148, 196, 117, 23);
 		contentPane.add(btnExecutar);
 	}
 }

@@ -1,3 +1,4 @@
+package ep2ocd;
 class Ula {
     private int X;
     private int Y;

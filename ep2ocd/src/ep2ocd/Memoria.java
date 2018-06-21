@@ -1,3 +1,4 @@
+package ep2ocd;
 import java.util.LinkedList;
 class Memoria {
     private LinkedList<Processo> filaDeProcesso = new LinkedList<Processo>(); 
