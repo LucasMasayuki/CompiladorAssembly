@@ -4,18 +4,22 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-import javax.swing.JDesktopPane;
-import javax.swing.JToolBar;
+import javax.swing.JButton;
+import javax.swing.JMenuBar;
+import com.jgoodies.forms.factories.DefaultComponentFactory;
+import java.awt.Scrollbar;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class InterfaceKetman extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
+    private Memoria memoria = new Memoria();
+    private Comandos comandosAssembly = new Comandos();
+    private Uc uc = new Uc();
 
 	/**
 	 * Launch the application.
@@ -38,31 +42,41 @@ public class InterfaceKetman extends JFrame {
 	 */
 	public InterfaceKetman() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(300, 300, 450, 300);
+		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		textField = new JTextField();
-		textField.setBounds(40, 120, 367, 19);
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					String comando = textField.getText();
+					InterpretadorAssembly interpreta = new InterpretadorAssembly();
+					InterpretadorAssembly.compila(comando, memoria, uc, comandosAssembly);
+				  }
+			}
+		});
+		textField.setBounds(49, 136, 350, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		JButton btnExecutar = new JButton("Executar");
-		btnExecutar.setBounds(162, 227, 117, 25);
-		contentPane.add(btnExecutar);
-		
-		JLabel lblNewLabel = new JLabel("Coloque o comando em Assembly um de cada vez");
-		lblNewLabel.setBounds(40, 44, 367, 15);
+		JLabel lblNewLabel = new JLabel("Coloque um comando de cada vez");
+		lblNewLabel.setBounds(49, 38, 172, 14);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Aperte enter ao fim de cada entrada");
-		lblNewLabel_1.setBounds(40, 68, 367, 15);
-		contentPane.add(lblNewLabel_1);
+		JLabel lblNewLabel1 = new JLabel("Ao final de cada comando aperte enter");
+		lblNewLabel1.setBounds(49, 59, 350, 14);
+		contentPane.add(lblNewLabel1);
 		
-		JLabel lblNewLabel_2 = new JLabel("Aperte executar para finalizar");
-		lblNewLabel_2.setBounds(40, 95, 367, 15);
-		contentPane.add(lblNewLabel_2);
+		JLabel lblNewLabel11 = new JLabel("Aperte Executar");
+		lblNewLabel11.setBounds(49, 84, 350, 14);
+		contentPane.add(lblNewLabel11);
+		
+		JButton btnExecutar = new JButton("Executar");
+		btnExecutar.setBounds(176, 196, 89, 23);
+		contentPane.add(btnExecutar);
 	}
 }
