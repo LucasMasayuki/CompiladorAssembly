@@ -1,3 +1,4 @@
+package ep2ocd;
 import java.util.Map;
 import java.util.HashMap;
 class Comandos {
