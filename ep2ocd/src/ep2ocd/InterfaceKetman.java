@@ -61,10 +61,9 @@ public class InterfaceKetman extends JFrame {
 						text.append(input);
 						text.append('\n');
 					}
-
-					InterpretadorAssembly.compila(comando, memoria, uc, comandosAssembly);
 					ListaDeComandos secondFrame = new ListaDeComandos(text.toString());
 					secondFrame.setVisible(true);
+					InterpretadorAssembly.compila(comando, memoria, uc, comandosAssembly);
 				  }
 			}
 		});

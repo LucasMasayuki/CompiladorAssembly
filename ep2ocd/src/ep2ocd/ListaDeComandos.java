@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 public class ListaDeComandos extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	private JTextPane txtpnA;
 
 	/**
 	 * Launch the application.
@@ -42,10 +43,10 @@ public class ListaDeComandos extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JTextPane txtpnA = new JTextPane();
+			txtpnA = new JTextPane();
 			txtpnA.setEditable(false);
 			txtpnA.setText("Não possui comandos");
-			txtpnA.setBounds(12, 45, 426, 181);
+			txtpnA.setBounds(10, 36, 403, 163);
 			contentPanel.add(txtpnA);
 		}
 		{
@@ -66,18 +67,17 @@ public class ListaDeComandos extends JDialog {
 		}
 	}
 	
+	
 	public ListaDeComandos(String text) {
-		System.out.print(text);
-		
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JTextPane txtpnA = new JTextPane();
+			txtpnA = new JTextPane();
 			txtpnA.setEditable(false);
-			txtpnA.setText(text.toString());
+			txtpnA.setText(text);
 			txtpnA.setBounds(12, 45, 426, 181);
 			contentPanel.add(txtpnA);
 		}
@@ -97,6 +97,10 @@ public class ListaDeComandos extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 		}
+	}
+
+	public void setTextComand(String text) {
+		txtpnA.setText(text);
 	}
 
 }
