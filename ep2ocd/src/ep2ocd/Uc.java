@@ -3,20 +3,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Uc {
-    private String PC;
-    private String IR;
-    private String MBR;
-    private String MAR;
-    private String AX;
-    private String BX;
-    private String CX;
-    private String DX;
+    private String pc;
+    private String ir;
+    private String mbr;
+    private String mar;
+    private String ax;
+    private String bx;
+    private String cx;
+    private String dx;
     private Map<String, String> registradoresUc =  new HashMap<String, String>();
     private String Registradores[] = {
-        "AX",
-        "BX",
-        "CX",
-        "DX"
+        "ax",
+        "bx",
+        "cx",
+        "dx"
     };
 
     public Uc() {
@@ -35,7 +35,7 @@ class Uc {
 
     public boolean verificaSeUmRegistradorValido(String supostoRegistrador) {
         for (int i = 0; i < this.Registradores.length; i++) {
-            if (this.Registradores[i] == supostoRegistrador) {
+            if (this.Registradores[i].equals(supostoRegistrador)) {
                 return true;
             }
         }

@@ -17,14 +17,23 @@ public class Palavra {
 	}
 
 	public String getOpcode() {
+		if (this.opcode == null) {
+			return "";
+		}
 		return this.opcode;
 	}
 
 	public String getOperandoUm() {
+		if (this.operandoUm == null) {
+			return "";
+		}
 		return this.operandoUm;
 	}
 
 	public String getOperandoDois() {
+		if (this.operandoDois == null) {
+			return "";
+		}
 		return this.operandoDois;
 	}
 }
