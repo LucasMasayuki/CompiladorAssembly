@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import javax.swing.JScrollPane;
 
 public class InterfaceKetman extends JFrame {
 
@@ -21,7 +23,12 @@ public class InterfaceKetman extends JFrame {
     private Comandos comandosAssembly = new Comandos();
     private Uc uc = new Uc();
 	private ArrayList<String> comandos = new ArrayList<String>();
-
+	JTextPane txtpnA;
+	
+	private void atualizaComandos(String text) {
+		txtpnA.setText(text);
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -30,6 +37,8 @@ public class InterfaceKetman extends JFrame {
 			public void run() {
 				try {
 					InterfaceKetman frame = new InterfaceKetman();
+					frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+					frame.setUndecorated(true);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +52,7 @@ public class InterfaceKetman extends JFrame {
 	 */
 	public InterfaceKetman() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -64,30 +73,27 @@ public class InterfaceKetman extends JFrame {
 						text.append(input);
 						text.append('\n');
 					}
-					ListaDeComandos secondFrame = new ListaDeComandos(text.toString());
-					secondFrame.setVisible(true);
+					atualizaComandos(text.toString());
 					InterpretadorAssembly.compila(comando, memoria, uc, comandosAssembly);
 				  }
 			}
 		});
-		textField.setBounds(49, 136, 350, 20);
+		textField.setBounds(86, 396, 350, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblNewLabel = new JLabel("Coloque um comando de cada vez");
-		lblNewLabel.setBounds(49, 38, 350, 14);
+		JLabel lblNewLabel = new JLabel(
+					"<html><center>Bem vindo Usuário ao compilador Assembly.</center> <br><br> "
+					+ "<center>Comece colocando um comando por vez, apertando enter ao final de cada comando</center><br><br>"
+					+ "<center>voce vera no painel ao lado cada comando que voce digitou. </center><br><br> "
+					+ "<center>Ao finalizar de colocar todos os comandos que voce deseja,</center><br><br>"
+					+ "<center>aperte o botao executar abaixo para que os comandos sejam executados</center></html>"
+				);
+		lblNewLabel.setBounds(12, 131, 592, 195);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblNewLabel1 = new JLabel("Ao final de cada comando aperte enter");
-		lblNewLabel1.setBounds(49, 59, 350, 14);
-		contentPane.add(lblNewLabel1);
-		
-		JLabel lblNewLabel11 = new JLabel("Aperte Executar");
-		lblNewLabel11.setBounds(49, 84, 350, 14);
-		contentPane.add(lblNewLabel11);
-		
 		JButton btnExecutar = new JButton("Executar");
-		btnExecutar.setBounds(148, 196, 117, 23);
+		btnExecutar.setBounds(206, 503, 117, 23);
 		btnExecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
@@ -97,5 +103,13 @@ public class InterfaceKetman extends JFrame {
 		});
 		btnExecutar.setActionCommand("OK");
 		contentPane.add(btnExecutar);
-	}
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(1509, 38, 3, 3);
+		contentPane.add(scrollPane);
+		txtpnA = new JTextPane();
+		txtpnA.setEditable(false);
+		txtpnA.setText("Não possui comandos");
+		txtpnA.setBounds(622, 38, 890, 798);
+		contentPane.add(txtpnA);}
 }
