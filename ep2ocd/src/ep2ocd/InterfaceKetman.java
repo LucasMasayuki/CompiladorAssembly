@@ -78,7 +78,7 @@ public class InterfaceKetman extends JFrame {
 				  }
 			}
 		});
-		textField.setBounds(86, 396, 350, 20);
+		textField.setBounds(97, 394, 424, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
@@ -93,7 +93,7 @@ public class InterfaceKetman extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JButton btnExecutar = new JButton("Executar");
-		btnExecutar.setBounds(206, 503, 117, 23);
+		btnExecutar.setBounds(218, 487, 117, 23);
 		btnExecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
