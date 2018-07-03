@@ -58,16 +58,15 @@ class Uc {
     			this.mar = this.pc;
     		}
 	    	if (jota == 19 && sinais[atual].charAt(jota) == '1') {
+    			ula.setX(1);
+    			ula.setY(pc);
+    		} 
+	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
     			StringBuilder binario = new StringBuilder();
     			binario.append(sinais[atual].charAt(26));
     			binario.append(sinais[atual].charAt(27));
     			binario.append(sinais[atual].charAt(28));
-    			int numerosomado = Integer.parseInt(binario.toString(), 2);
-    			ula.setX(numerosomado);
-    			ula.setY(pc);
-    		} 
-	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
-    			this.pc = ula.getResultado("soma");
+    			this.pc = ula.getResultado(binario.toString());
     		}
 	
 	    	if (jota == 22 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(24) == '1') {
@@ -126,6 +125,8 @@ class Uc {
 	    	for (int jota = 0; jota < sinais[i].length(); jota++) {
 		    	if (jota == 1 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(jota + 1) == '1') {
 		    		builder.append("t1: mar <- pc  \n");
+		    		builder.append("t1: x <- pc  \n");
+		    		builder.append("t1: y <- 1  \n");
 	    		}
 		    	if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(20) == '1') {
 		    		builder.append("t3: pc <- ula \n");

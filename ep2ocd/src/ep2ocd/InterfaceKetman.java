@@ -1,6 +1,9 @@
 package ep2ocd;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -41,7 +44,6 @@ public class InterfaceKetman extends JFrame {
 	 */
 	public InterfaceKetman() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -204,8 +206,7 @@ public class InterfaceKetman extends JFrame {
 			public void run() {
 				try {
 					frame = new InterfaceKetman();
-					frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-					frame.setUndecorated(true);
+					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
