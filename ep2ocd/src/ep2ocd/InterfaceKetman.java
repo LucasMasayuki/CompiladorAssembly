@@ -83,13 +83,13 @@ public class InterfaceKetman extends JFrame {
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel(
-					"<html><center>Bem vindo Usuário ao compilador Assembly.</center> <br><br> "
+					"<html><center>Bem vindo usuario ao compilador Assembly.</center> <br><br> "
 					+ "<center>Comece colocando um comando por vez, apertando enter ao final de cada comando</center><br><br>"
 					+ "<center>voce vera no painel ao lado cada comando que voce digitou. </center><br><br> "
 					+ "<center>Ao finalizar de colocar todos os comandos que voce deseja,</center><br><br>"
 					+ "<center>aperte o botao executar abaixo para que os comandos sejam executados</center></html>"
 				);
-		lblNewLabel.setBounds(12, 131, 592, 195);
+		lblNewLabel.setBounds(12, 131, 412, 283);
 		contentPane.add(lblNewLabel);
 		
 		JButton btnExecutar = new JButton("Executar");
@@ -97,19 +97,13 @@ public class InterfaceKetman extends JFrame {
 		btnExecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
-				InterfaceKetmanInstrucoes interfaceKetman = new InterfaceKetmanInstrucoes(memoria, uc, comandosAssembly);
-				interfaceKetman.setVisible(true);
 			}
 		});
 		btnExecutar.setActionCommand("OK");
 		contentPane.add(btnExecutar);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(1509, 38, 3, 3);
-		contentPane.add(scrollPane);
 		txtpnA = new JTextPane();
 		txtpnA.setEditable(false);
-		txtpnA.setText("Não possui comandos");
+		txtpnA.setText("Nao possui comandos");
 		txtpnA.setBounds(622, 38, 890, 798);
 		contentPane.add(txtpnA);}
 }
