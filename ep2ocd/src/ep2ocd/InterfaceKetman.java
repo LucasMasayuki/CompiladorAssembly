@@ -118,6 +118,12 @@ public class InterfaceKetman extends JFrame {
 			{"dx" , "0"},
 			{"x" , 0},
 			{"y" , 0},
+			{"flagE" , 0},
+			{"flagNe" , 0},
+			{"flagG" , 0},
+			{"flagGe" , 0},
+			{"flagL" , 0},
+			{"flagLe" , 0}
 		};
 		
 		String[] coluna = {"Componente", "valor"};
@@ -150,7 +156,6 @@ public class InterfaceKetman extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					System.out.println(atual);
-					atual++;
 					if (atual > 3) {
 						busca = false;
 						atual = 0;
@@ -163,6 +168,7 @@ public class InterfaceKetman extends JFrame {
 						model = new DefaultTableModel(resposta, coluna);
 						table.setModel(model);
 					}
+					atual++;
 					e.consume();
 				} else {
 					e.consume();

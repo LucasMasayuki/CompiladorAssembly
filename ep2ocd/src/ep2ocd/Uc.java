@@ -11,6 +11,12 @@ class Uc {
     private String bx = "0";
     private String cx = "0";
     private String dx = "0";
+    private int flagE = 0;
+    private int flagNe = 0;
+    private int flagG = 0;
+    private int flagGe = 0;
+    private int flagL = 0;
+    private int flagLe = 0;
     private Map<String, String> registradoresUc =  new HashMap<String, String>();
 
     private String Registradores[] = {
@@ -50,21 +56,27 @@ class Uc {
     	for (int jota = 0; jota < sinais[atual].length(); jota++) {
 	    	if (jota == 1 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(jota + 1) == '1') {
     			this.mar = this.pc;
-    		} else if (jota == 19 && sinais[atual].charAt(jota) == '1') {
+    		}
+	    	if (jota == 19 && sinais[atual].charAt(jota) == '1') {
     			StringBuilder binario = new StringBuilder();
-    			binario.append(sinais[26]);
-    			binario.append(sinais[27]);
-    			binario.append(sinais[28]);
+    			binario.append(sinais[atual].charAt(26));
+    			binario.append(sinais[atual].charAt(27));
+    			binario.append(sinais[atual].charAt(28));
     			int numerosomado = Integer.parseInt(binario.toString(), 2);
     			ula.setX(numerosomado);
     			ula.setY(pc);
-    		} else if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
+    		} 
+	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
     			this.pc = ula.getResultado("soma");
-    		} else if (jota == 22 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(24) == '1') {
+    		}
+	
+	    	if (jota == 22 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(24) == '1') {
     			memoria.setEnderecoTemporario(mar);
-    		} else if (jota == 23 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(25) == '1') {
+    		} 
+	    	if (jota == 23 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(25) == '1') {
     			this.mbr = memoria.getProcesso(memoria.getEnderecoTemporario());
-    		} else if (jota == 5 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(25) == '1') {
+    		}
+	    	if (jota == 4 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(15) == '1' && sinais[atual].charAt(17) == '1') {
     			this.ir = this.mbr.palavra;
     		}
 		}
@@ -95,6 +107,12 @@ class Uc {
 			{"dx" , this.dx},
 			{"x" , ula.getX()},
 			{"y" , ula.getY()},
+			{"flagE" , this.flagE},
+			{"flagNe" , this.flagNe},
+			{"flagG" , this.flagG},
+			{"flagGe" , this.flagGe},
+			{"flagL" , this.flagL},
+			{"flagLe" , this.flagLe}
 		};
 		
 		return dados;
@@ -108,16 +126,17 @@ class Uc {
 	    	for (int jota = 0; jota < sinais[i].length(); jota++) {
 		    	if (jota == 1 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(jota + 1) == '1') {
 		    		builder.append("t1: mar <- pc  \n");
-	    		} else if (jota == 19 && sinais[i].charAt(jota) == '1') {
-		    		builder.append("t2: x <- pc \n");
-		    		builder.append("t2: y <- 1 \n \n");
-	    		} else if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(20) == '1') {
+	    		}
+		    	if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(20) == '1') {
 		    		builder.append("t3: pc <- ula \n");
-	    		} else if (jota == 22 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(24) == '1') {
+	    		} 
+		    	if (jota == 22 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(24) == '1') {
 		    		builder.append("t3: memoria <- mar \n");
-	    		} else if (jota == 23 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(25) == '1') {
+	    		} 
+		    	if (jota == 23 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(25) == '1') {
 		    		builder.append("t4: mbr <- memoria \n");
-	    		} else if (jota == 5 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(25) == '1') {
+	    		} 
+		    	if (jota == 4 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(15) == '1' && sinais[i].charAt(17) == '1') {
 		    		builder.append("t5: ir <- mbr \n");
 	    		}
 			}
