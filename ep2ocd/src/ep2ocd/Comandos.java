@@ -4,6 +4,7 @@ import java.util.HashMap;
 class Comandos {
     private Map<String, String> comandos =  new HashMap<String, String>();
     private String assemblyComandos[] = {
+    	"cicloDeBusca",
         "add",
         "mov",
         "sub",
@@ -21,7 +22,7 @@ class Comandos {
     };
 
     public Comandos() {
-        for (int i = 0; i < this.assemblyComandos.length; i++) {
+        for (int i = 1; i < this.assemblyComandos.length; i++) {
             this.comandos.put(this.assemblyComandos[i], criaComandoBinario(i));
         }
     }

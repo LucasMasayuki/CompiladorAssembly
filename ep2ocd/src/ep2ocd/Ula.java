@@ -10,8 +10,20 @@ class Ula {
     public void setX(int binario) {
         this.X = binario;
     }
+    
+    public int getX() {
+    	return this.X;
+    }
+    
+    public int getY() {
+    	return this.Y;
+    }
 
-    public int getResultado() {
-        return X + Y;
+    public int getResultado(String tipoOperacao) {
+    	if (tipoOperacao == "soma") {
+            return X + Y;
+    	} else {
+    		return 0;
+    	}
     }
 }

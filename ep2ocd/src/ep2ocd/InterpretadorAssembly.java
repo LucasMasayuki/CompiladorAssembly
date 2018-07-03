@@ -7,9 +7,10 @@ class InterpretadorAssembly {
         StringBuilder instrucao = new StringBuilder();
         StringBuilder comando = new StringBuilder(entrada);
         String opcode;
-        String operandoUm;
+        String operandoUm = "";
         String operandoDois = "";
         int i = 0;
+        int converte = 0;
 
         instrucao.append("");
 
@@ -23,33 +24,47 @@ class InterpretadorAssembly {
         comandosAssembly.imprimeTabelaOpcode();
         
         instrucao = new StringBuilder();
-        
         i++;
         
-        while ((comando.length() - 1) != i) {
-        	if (comando.charAt(i) != ',') {
+        while ((comando.length()) != i) {
+        	if (comando.charAt(i) == ',') {
+                i++;
         		break;
         	}
         	instrucao.append(comando.charAt(i));
             i++;
         }
+        
+        boolean eUmRegistrador = false;
 
         if (uc.verificaSeUmRegistradorValido(instrucao.toString())) {
             operandoUm = uc.getComandoBinario(instrucao.toString());
+            eUmRegistrador = true;
         } else {
-            operandoUm = instrucao.toString();
+        	converte = Integer.parseInt(instrucao.toString(), 16);
+            operandoUm = Integer.toString(converte, 2);
         }
 
-        if (comando.length() == i - 1) {
-            palavra = new Palavra(opcode, operandoUm);
+        instrucao = new StringBuilder();
+
+        if (comando.length() == i) {
+            palavra = new Palavra(opcode, operandoUm, eUmRegistrador);
         } else {
-        	i++;
             while (comando.length() != i){
                 instrucao.append(comando.charAt(i));
                 i++;
             }
-            palavra = new Palavra(opcode, operandoUm, operandoDois);
+
+            if (uc.verificaSeUmRegistradorValido(instrucao.toString())) {
+            	operandoDois = uc.getComandoBinario(instrucao.toString());
+            } else {
+            	converte = Integer.parseInt(instrucao.toString(), 16);
+            	operandoDois = Integer.toString(converte, 2);
+            }
+
+            palavra = new Palavra(opcode, operandoUm, operandoDois, eUmRegistrador);
         }
+
         memoria.novoProcesso(palavra);
         memoria.verificaEstadoDaMemoria();
     }
