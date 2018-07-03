@@ -34,10 +34,12 @@ class InterpretadorAssembly {
         	instrucao.append(comando.charAt(i));
             i++;
         }
-        System.out.println(instrucao.toString());
+        
+        boolean eUmRegistrador = false;
 
         if (uc.verificaSeUmRegistradorValido(instrucao.toString())) {
             operandoUm = uc.getComandoBinario(instrucao.toString());
+            eUmRegistrador = true;
         } else {
         	converte = Integer.parseInt(instrucao.toString(), 16);
             operandoUm = Integer.toString(converte, 2);
@@ -46,7 +48,7 @@ class InterpretadorAssembly {
         instrucao = new StringBuilder();
 
         if (comando.length() == i) {
-            palavra = new Palavra(opcode, operandoUm);
+            palavra = new Palavra(opcode, operandoUm, eUmRegistrador);
         } else {
             while (comando.length() != i){
                 instrucao.append(comando.charAt(i));
@@ -60,7 +62,7 @@ class InterpretadorAssembly {
             	operandoDois = Integer.toString(converte, 2);
             }
 
-            palavra = new Palavra(opcode, operandoUm, operandoDois);
+            palavra = new Palavra(opcode, operandoUm, operandoDois, eUmRegistrador);
         }
 
         memoria.novoProcesso(palavra);

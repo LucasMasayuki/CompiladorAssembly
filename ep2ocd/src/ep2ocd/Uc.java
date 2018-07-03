@@ -3,21 +3,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Uc {
-    private String pc;
-    private String ir;
-    private String mbr;
-    private String mar;
-    private String ax;
-    private String bx;
-    private String cx;
-    private String dx;
+    private int pc = 1;
+    private Palavra ir;
+    private Processo mbr;
+    private int mar;
+    private String ax = "0";
+    private String bx = "0";
+    private String cx = "0";
+    private String dx = "0";
     private Map<String, String> registradoresUc =  new HashMap<String, String>();
+
     private String Registradores[] = {
         "ax",
         "bx",
         "cx",
         "dx"
     };
+
+    private Ula ula = new Ula();
 
     public Uc() {
         for (int i = 0; i < this.Registradores.length; i++) {
@@ -40,5 +43,86 @@ class Uc {
             }
         }
         return false;
+    }
+
+    public Object[][] cicloDeBusca(Firmware firmware, Memoria memoria, int atual) {
+    	String[] sinais = firmware.getSinaisDeControle(0);
+    	for (int jota = 0; jota < sinais[atual].length(); jota++) {
+	    	if (jota == 1 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(jota + 1) == '1') {
+    			this.mar = this.pc;
+    		} else if (jota == 19 && sinais[atual].charAt(jota) == '1') {
+    			StringBuilder binario = new StringBuilder();
+    			binario.append(sinais[26]);
+    			binario.append(sinais[27]);
+    			binario.append(sinais[28]);
+    			int numerosomado = Integer.parseInt(binario.toString(), 2);
+    			ula.setX(numerosomado);
+    			ula.setY(pc);
+    		} else if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
+    			this.pc = ula.getResultado("soma");
+    		} else if (jota == 22 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(24) == '1') {
+    			memoria.setEnderecoTemporario(mar);
+    		} else if (jota == 23 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(25) == '1') {
+    			this.mbr = memoria.getProcesso(memoria.getEnderecoTemporario());
+    		} else if (jota == 5 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(25) == '1') {
+    			this.ir = this.mbr.palavra;
+    		}
+		}
+
+    	String binarioIr;
+    	String binarioMbr;
+
+    	if (this.ir == null) {
+    		binarioIr = "0";
+    	} else {
+    		binarioIr = this.ir.getPalavraCompleta();
+    	}
+    	
+    	if (this.mbr == null) {
+    		binarioMbr = "0";
+    	} else {
+    		binarioMbr = this.mbr.palavra.getPalavraCompleta();
+    	}
+   
+		Object[][] dados = {
+			{"pc" , this.pc },
+			{"ir" , binarioIr },
+			{"mbr" , binarioMbr },
+			{"mar" , this.mar},
+			{"ax" , this.ax},
+			{"bx" , this.bx},
+			{"cx" , this.cx},
+			{"dx" , this.dx},
+			{"x" , ula.getX()},
+			{"y" , ula.getY()},
+		};
+		
+		return dados;
+    }
+    
+    public String cicloDeBuscaParaMostrarNaTela(Firmware firmware, Memoria memoria) {
+    	String[] sinais = firmware.getSinaisDeControle(0);
+    	StringBuilder builder = new StringBuilder();
+ 
+    	for (int i = 0; i < sinais.length; i++) {
+	    	for (int jota = 0; jota < sinais[i].length(); jota++) {
+		    	if (jota == 1 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(jota + 1) == '1') {
+		    		builder.append("t1: mar <- pc  \n");
+	    		} else if (jota == 19 && sinais[i].charAt(jota) == '1') {
+		    		builder.append("t2: x <- pc \n");
+		    		builder.append("t2: y <- 1 \n \n");
+	    		} else if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(20) == '1') {
+		    		builder.append("t3: pc <- ula \n");
+	    		} else if (jota == 22 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(24) == '1') {
+		    		builder.append("t3: memoria <- mar \n");
+	    		} else if (jota == 23 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(25) == '1') {
+		    		builder.append("t4: mbr <- memoria \n");
+	    		} else if (jota == 5 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(25) == '1') {
+		    		builder.append("t5: ir <- mbr \n");
+	    		}
+			}
+    	}
+ 
+    	return builder.toString();
     }
 }
