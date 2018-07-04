@@ -157,18 +157,17 @@ public class InterfaceKetman extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					System.out.println(atual);
-					if (atual > 3) {
-						busca = false;
-						atual = 0;
-					}
-
 					if (busca) {
-						Object resposta[][] = uc.cicloDeBusca(firmware, memoria, atual);
-						reset();
-						String[] coluna = {"Componente", "valor"};
-						model = new DefaultTableModel(resposta, coluna);
-						table.setModel(model);
+						if (atual > 3) {
+							busca = false;
+							atual = 0;
+						} else {
+							Object resposta[][] = uc.cicloDeBusca(firmware, memoria, atual);
+							reset();
+							String[] coluna = {"Componente", "valor"};
+							model = new DefaultTableModel(resposta, coluna);
+							table.setModel(model);
+						}
 					}
 					atual++;
 					e.consume();

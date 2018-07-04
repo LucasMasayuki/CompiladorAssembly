@@ -18,6 +18,7 @@ class Uc {
     private int flagL = 0;
     private int flagLe = 0;
     private Map<String, String> registradoresUc =  new HashMap<String, String>();
+    private String res = "";
 
     private String Registradores[] = {
         "ax",
@@ -53,7 +54,6 @@ class Uc {
 
     public Object[][] cicloDeBusca(Firmware firmware, Memoria memoria, int atual) {
     	String[] sinais = firmware.getSinaisDeControle(0);
-    	String res = "";
     	for (int jota = 0; jota < sinais[atual].length(); jota++) {
 	    	if (jota == 1 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(jota + 1) == '1') {
     			this.mar = this.pc;
@@ -68,7 +68,6 @@ class Uc {
     			ula.setY(pc);
     		}
 	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
-    	    	System.out.print(res);
     			this.pc = ula.getResultado(res);
     		}
 	

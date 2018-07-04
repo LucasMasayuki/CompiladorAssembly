@@ -16,7 +16,7 @@ class Ula {
         operacao.put("100", "multiplicacao");
         operacao.put("101", "++");
         operacao.put("110", " - -");
-        operacao.put("111", "comparação");
+        operacao.put("111", "comparacao");
     }
 
     public void setY(int binario) {
