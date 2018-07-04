@@ -36,7 +36,6 @@ class Ula {
     }
 
     public int getResultado(String tipoOperacao) {
-    	System.out.print(tipoOperacao);
     	if (operacao.get(tipoOperacao).equals("++") || operacao.get(tipoOperacao).equals("--")) {
             return X + Y;
     	} else {

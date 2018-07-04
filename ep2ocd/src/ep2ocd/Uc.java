@@ -53,20 +53,23 @@ class Uc {
 
     public Object[][] cicloDeBusca(Firmware firmware, Memoria memoria, int atual) {
     	String[] sinais = firmware.getSinaisDeControle(0);
+    	String res = "";
     	for (int jota = 0; jota < sinais[atual].length(); jota++) {
 	    	if (jota == 1 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(jota + 1) == '1') {
     			this.mar = this.pc;
     		}
 	    	if (jota == 19 && sinais[atual].charAt(jota) == '1') {
-    			ula.setX(1);
-    			ula.setY(pc);
-    		} 
-	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
     			StringBuilder binario = new StringBuilder();
     			binario.append(sinais[atual].charAt(26));
     			binario.append(sinais[atual].charAt(27));
     			binario.append(sinais[atual].charAt(28));
-    			this.pc = ula.getResultado(binario.toString());
+    	    	res = binario.toString();
+    			ula.setX(1);
+    			ula.setY(pc);
+    		}
+	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
+    	    	System.out.print(res);
+    			this.pc = ula.getResultado(res);
     		}
 	
 	    	if (jota == 22 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(24) == '1') {
