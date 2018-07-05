@@ -3,10 +3,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Uc {
-    private int pc = 1;
+    private String pc = "0";
     private Palavra ir;
     private Processo mbr;
-    private int mar;
+    private String mar = "0";
     private String ax = "0";
     private String bx = "0";
     private String cx = "0";
@@ -18,6 +18,7 @@ class Uc {
     private int flagL = 0;
     private int flagLe = 0;
     private Map<String, String> registradoresUc =  new HashMap<String, String>();
+    private String res = "";
 
     private String Registradores[] = {
         "ax",
@@ -34,6 +35,10 @@ class Uc {
         }
     }
     
+    public Palavra getIr() {
+    	return this.ir;
+    }
+
     private String criaComandoBinario(int decimal) {
         return Integer.toString(decimal, 2);
     }
@@ -50,27 +55,33 @@ class Uc {
         }
         return false;
     }
+    
+    public int getIndex(String comando) {
+    	return 1;
+    }
 
     public Object[][] cicloDeBusca(Firmware firmware, Memoria memoria, int atual) {
-    	String[] sinais = firmware.getSinaisDeControle(0);
+    	String[] sinais = firmware.getSinaisDeControle(0, this.ir);
+    	System.out.print(sinais);
     	for (int jota = 0; jota < sinais[atual].length(); jota++) {
 	    	if (jota == 1 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(jota + 1) == '1') {
     			this.mar = this.pc;
     		}
 	    	if (jota == 19 && sinais[atual].charAt(jota) == '1') {
-    			ula.setX(1);
-    			ula.setY(pc);
-    		} 
-	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
     			StringBuilder binario = new StringBuilder();
     			binario.append(sinais[atual].charAt(26));
     			binario.append(sinais[atual].charAt(27));
     			binario.append(sinais[atual].charAt(28));
-    			this.pc = ula.getResultado(binario.toString());
+    	    	res = binario.toString();
+    			ula.setX(Integer.toBinaryString(1));
+    			ula.setY(pc);
+    		}
+	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
+    			this.pc = Integer.toHexString(ula.getResultado(res));
     		}
 	
-	    	if (jota == 22 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(24) == '1') {
-    			memoria.setEnderecoTemporario(mar);
+	    	if (jota == 21 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(24) == '1') {
+    			memoria.setEnderecoTemporario(this.mar);
     		} 
 	    	if (jota == 23 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(25) == '1') {
     			this.mbr = memoria.getProcesso(memoria.getEnderecoTemporario());
@@ -117,8 +128,8 @@ class Uc {
 		return dados;
     }
     
-    public String cicloDeBuscaParaMostrarNaTela(Firmware firmware, Memoria memoria) {
-    	String[] sinais = firmware.getSinaisDeControle(0);
+    public StringBuilder cicloDeBuscaParaMostrarNaTela(Firmware firmware, Memoria memoria) {
+    	String[] sinais = firmware.getSinaisDeControle(0, this.ir);
     	StringBuilder builder = new StringBuilder();
  
     	for (int i = 0; i < sinais.length; i++) {
@@ -143,6 +154,157 @@ class Uc {
 			}
     	}
  
-    	return builder.toString();
+    	return builder;
+    }
+
+    public StringBuilder cicloDeExecucaoParaMostrarNaTela(Firmware firmware, int indice, Memoria memoria) {
+//    	Barramento barramento = new Barramento();
+//    	StringBuilder builder = new StringBuilder();
+//    	Object caminhos[][] = new Object[27][27];
+//    	int ind = 0;
+//    	String[] sinaisDeControle = firmware.getSinaisDeControle(indice);
+//    	for (int i = 0; i < sinaisDeControle.length; i++) {
+//    		for (int j = 0; j < sinaisDeControle[i].length(); j++)
+//	    		if (sinaisDeControle[i].charAt(j) == '1') {
+//	        		caminhos[ind] = barramento.getCaminhos(j);
+//	        		if ()
+//	    		}
+//	    	}
+//    	}
+    	int atual = 0;
+    	boolean acabou = false;
+    	StringBuilder builder = new StringBuilder();
+		int end = memoria.getLinha();
+    	while (!acabou) {
+    		if (end != atual) {
+		    	String[] sinaisDeControle = firmware.getSinaisDeControleParaMostrarNaTela(indice, firmware, memoria, atual);
+		    	for (int i = 0; i < sinaisDeControle.length; i++) {
+		    		switch (sinaisDeControle[i]) {
+		    			case "00000000000000001010000000000":
+				    		builder.append("t1: x <- irp1  \n");
+				    		break;
+		
+		    			case "00000000000000100001000000001":
+				    		builder.append("t2: y <- irp2  \n");
+				    		break;
+		
+		    			case "00000100000000000000100000000":
+				    		builder.append("t3 :ax <- ula  \n");
+				    		break;
+		
+		    			case "00000001000000000000100000000":
+				    		builder.append("t3: bx <- ula  \n");
+				    		break;
+		
+		    			case "00000000010000000000100000000":
+				    		builder.append("t3: cx <- ula  \n");
+				    		break;
+		
+		    			case "00000000000100000000100000000":
+				    		builder.append("t3: dx <- ula  \n");
+				    		break;
+		
+		    			case "00000100000000100000000000000":
+				    		builder.append("t1: ax <- irp2  \n");
+				    		break;
+		
+		    			case "00000001000000100000000000000":
+				    		builder.append("t1: bx <- irp2  \n");
+				    		break;
+		
+		    			case "00000000010000100000000000000":
+				    		builder.append("t1: cx <- irp2  \n");
+				    		break;
+		
+		    			case "00000000000100100000000000000":
+				    		builder.append("t1: dx <- irp2  \n");
+				    		break;
+		    		}	
+		    	}
+    		} else {
+    			acabou = true;
+    		}
+    	}
+    	return builder;
+    }
+    
+    public Object[][] cicloDeExecucao(Firmware firmware, int indice, int atual) {
+    	String[] sinaisDeControle = firmware.getSinaisDeControle(indice, this.ir);
+		switch (sinaisDeControle[atual]) {
+			case "00000000000000001010000000000":
+				ula.setX(this.ir.getOperandoUm());
+	    		break;
+
+			case "00000000000000100001000000001":
+				ula.setY(this.ir.getOperandoDois());
+	    		break;
+
+			case "00000100000000000000100000000":
+	    		this.ax = Integer.toString(ula.getResultado("001"));
+	    		break;
+
+			case "00000001000000000000100000000":
+	    		this.bx = Integer.toString(ula.getResultado("001"));
+	    		break;
+
+			case "00000000010000000000100000000":
+	    		this.cx = Integer.toString(ula.getResultado("001"));
+	    		break;
+
+			case "00000000000100000000100000000":
+	    		this.dx = Integer.toString(ula.getResultado("001"));
+	    		break;
+
+			case "00000100000000100000000000000":
+				this.ax = this.ir.getOperandoDois();
+	    		break;
+
+			case "00000001000000100000000000000":
+				this.bx = this.ir.getOperandoDois();
+	    		break;
+
+			case "00000000010000100000000000000":
+				this.cx = this.ir.getOperandoDois();
+	    		break;
+
+			case "00000000000100100000000000000":
+				this.dx = this.ir.getOperandoDois();
+	    		break;
+		}
+		String binarioIr;
+    	String binarioMbr;
+
+    	if (this.ir == null) {
+    		binarioIr = "0";
+    	} else {
+    		binarioIr = this.ir.getPalavraCompleta();
+    	}
+    	
+    	if (this.mbr == null) {
+    		binarioMbr = "0";
+    	} else {
+    		binarioMbr = this.mbr.palavra.getPalavraCompleta();
+    	}
+   
+		Object[][] dados = {
+			{"pc" , this.pc },
+			{"ir" , binarioIr },
+			{"mbr" , binarioMbr },
+			{"mar" , this.mar},
+			{"ax" , this.ax},
+			{"bx" , this.bx},
+			{"cx" , this.cx},
+			{"dx" , this.dx},
+			{"x" , ula.getX()},
+			{"y" , ula.getY()},
+			{"flagE" , this.flagE},
+			{"flagNe" , this.flagNe},
+			{"flagG" , this.flagG},
+			{"flagGe" , this.flagGe},
+			{"flagL" , this.flagL},
+			{"flagLe" , this.flagLe}
+		};
+		
+		return dados;
     }
 }

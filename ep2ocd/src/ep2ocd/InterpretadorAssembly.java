@@ -58,7 +58,7 @@ class InterpretadorAssembly {
             if (uc.verificaSeUmRegistradorValido(instrucao.toString())) {
             	operandoDois = uc.getComandoBinario(instrucao.toString());
             } else {
-            	converte = Integer.parseInt(instrucao.toString(), 16);
+            	converte = Integer.parseInt(instrucao.toString());
             	operandoDois = Integer.toString(converte, 2);
             }
 

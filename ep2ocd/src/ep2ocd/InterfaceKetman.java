@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.Frame;
 
 public class InterfaceKetman extends JFrame {
 
@@ -36,6 +37,7 @@ public class InterfaceKetman extends JFrame {
 	private JTable table;
 	private boolean first = true;
 	private int atual = 0;
+	private int theend = 0;
 	private boolean busca = true;
 	private DefaultTableModel model;
 
@@ -43,6 +45,8 @@ public class InterfaceKetman extends JFrame {
 	 * Create the frame.
 	 */
 	public InterfaceKetman() {
+		setName("Compilador Assembly");
+		setExtendedState(Frame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -146,30 +150,51 @@ public class InterfaceKetman extends JFrame {
 		contentPane.add(lbl2);
 
 		table = new JTable(model);
-		table.setBounds(139, 496, 150, 160);
 		contentPane.add(table);
-		table.setEnabled(false);
+		table.getColumnModel().getColumn(0).setPreferredWidth(319);
+		table.getColumnModel().getColumn(1).setPreferredWidth(228);
 		table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		table.setEnabled(false);
+		table.setBounds(28, 450, 424, 160);
 		
 		txtpnA = new JTextPane();
 
 		txtpnA.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					System.out.println(atual);
-					if (atual > 3) {
-						busca = false;
-						atual = 0;
+					if (busca) {
+						if (atual > 3) {
+							busca = false;
+							atual = 0;
+						} else {
+							Object resposta[][] = uc.cicloDeBusca(firmware, memoria, atual);
+							reset();
+							String[] coluna = {"Componente", "valor"};
+							model = new DefaultTableModel(resposta, coluna);
+							table.setModel(model);
+						}
+					} else {
+						int indice = 0;
+						indice = Integer.parseInt(uc.getIr().getOpcode(), 2);
+						System.out.println(indice);
+
+						theend = firmware.tamanhoSinal(indice);
+						
+						if (theend != atual) {
+							Object resposta[][] = uc.cicloDeExecucao(firmware, indice, atual);
+
+							reset();
+							String[] coluna = {"Componente", "valor"};
+							model = new DefaultTableModel(resposta, coluna);
+							table.setModel(model);
+						} else {
+							atual = 0;
+							busca = true;
+						}
 					}
 
-					if (busca) {
-						Object resposta[][] = uc.cicloDeBusca(firmware, memoria, atual);
-						reset();
-						String[] coluna = {"Componente", "valor"};
-						model = new DefaultTableModel(resposta, coluna);
-						table.setModel(model);
-					}
 					atual++;
 					e.consume();
 				} else {
@@ -180,18 +205,27 @@ public class InterfaceKetman extends JFrame {
 
 		txtpnA.setBounds(622, 38, 890, 798);
 		contentPane.add(txtpnA);
+		
+		StringBuilder builder = new StringBuilder();
+		StringBuilder textBusca;
+		StringBuilder textExec;
 
 		for (int i = 0; i < end; i++) {
 			firmware = new Firmware();
-			String text = uc.cicloDeBuscaParaMostrarNaTela(firmware, memoria);
-			txtpnA.setText(text);
+			textBusca = new StringBuilder();
+			textBusca = uc.cicloDeBuscaParaMostrarNaTela(firmware, memoria);
+			builder.append(textBusca);
 			Processo processo = memoria.getProcesso(i);
+
 			int indice = Integer.parseInt(processo.palavra.getOpcode(), 2);
-			if (processo.palavra.getEUmRegistrador()) {
-				indice += Integer.parseInt(processo.palavra.getOperandoUm(), 2);
-			}
-			String[] sinaisDeControle = firmware.getSinaisDeControle(indice);
+
+			textExec = new StringBuilder();
+			textExec = uc.cicloDeExecucaoParaMostrarNaTela(firmware, indice, memoria);
+
+			builder.append(textExec);
 		}
+
+		txtpnA.setText(builder.toString());
 	}
 	
 	public void reset() {

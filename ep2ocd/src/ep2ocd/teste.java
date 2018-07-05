@@ -15,12 +15,15 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ListSelectionModel;
+import java.awt.Frame;
+import javax.swing.JTextPane;
+import javax.swing.JTextArea;
 
 public class teste extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	private JTextField textField;
+	private JTextField txtOaaaaaaaaa;
 
 	/**
 	 * Launch the application.
@@ -44,7 +47,7 @@ public class teste extends JFrame {
 	public teste() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setExtendedState(Frame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -54,7 +57,7 @@ public class teste extends JFrame {
 				"<html><center>Aperte enter a cada linha.</center> <br><br>"
 				+ "<center>Veja na tabela os valores mudarem</center><br><br>\"\n" 
 				+ "<center><b>Atencao nao pule as linhas.</b></center><br></html>");
-		lblNewLabel.setBounds(93, 222, 250, 150);
+		lblNewLabel.setBounds(93, 157, 250, 150);
 		contentPane.add(lblNewLabel);
 		String[][] dados = {
 				{"pc" , "0"},
@@ -94,18 +97,18 @@ public class teste extends JFrame {
 		table.getColumnModel().getColumn(1).setPreferredWidth(228);
 		table.setBorder(new LineBorder(new Color(0, 0, 0)));
 		table.setEnabled(false);
-		table.setBounds(12, 497, 424, 160);
+		table.setBounds(28, 450, 424, 160);
 		contentPane.add(table);
-		textField = new JTextField();
-		textField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-				}
-			}
-		});
-		textField.setEditable(false);
-		textField.setBounds(622, 38, 890, 798);
-		contentPane.add(textField);
+		
+		JTextPane txtpnOiii = new JTextPane();
+		txtpnOiii.setText("oiii");
+		txtpnOiii.setBounds(655, 71, 358, 720);
+		contentPane.add(txtpnOiii);
+		
+		txtOaaaaaaaaa = new JTextField();
+		txtOaaaaaaaaa.setText("oaaaaaaaaa");
+		txtOaaaaaaaaa.setBounds(994, 163, 335, 447);
+		contentPane.add(txtOaaaaaaaaa);
+		txtOaaaaaaaaa.setColumns(10);
 	}
 }

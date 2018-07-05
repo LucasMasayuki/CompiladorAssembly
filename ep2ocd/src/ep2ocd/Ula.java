@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Ula {
-    private int X;
-    private int Y;
+    private String X;
+    private String Y;
     private Map<String, String> operacao =  new HashMap<String, String>();
    
     public Ula() {
@@ -16,29 +16,30 @@ class Ula {
         operacao.put("100", "multiplicacao");
         operacao.put("101", "++");
         operacao.put("110", " - -");
-        operacao.put("111", "comparação");
+        operacao.put("111", "comparacao");
     }
 
-    public void setY(int binario) {
+    public void setY(String binario) {
         this.Y = binario;
     }
 
-    public void setX(int binario) {
+    public void setX(String binario) {
         this.X = binario;
     }
     
-    public int getX() {
+    public String getX() {
     	return this.X;
     }
     
-    public int getY() {
+    public String getY() {
     	return this.Y;
     }
 
     public int getResultado(String tipoOperacao) {
-    	System.out.print(tipoOperacao);
     	if (operacao.get(tipoOperacao).equals("++") || operacao.get(tipoOperacao).equals("--")) {
-            return X + Y;
+    		int xDecimal = Integer.parseInt(this.X, 2);
+    		int yDecimal = Integer.parseInt(this.Y, 2);
+            return xDecimal + yDecimal;
     	} else {
     		return 0;
     	}
