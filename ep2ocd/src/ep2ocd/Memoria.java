@@ -3,7 +3,7 @@ import java.util.LinkedList;
 class Memoria {
     private LinkedList<Processo> filaDeProcesso = new LinkedList<Processo>(); 
     private int linha = 0;
-    private int enderecoTemporario;
+    private String enderecoTemporario;
 
     private String enderecoEmHexadecimal(int linha) {
     	return Integer.toHexString(linha);
@@ -28,12 +28,12 @@ class Memoria {
         return this.linha;
     }
     
-    public void setEnderecoTemporario(int endereco) {
+    public void setEnderecoTemporario(String endereco) {
     	this.enderecoTemporario = endereco;
     }
     
     public int getEnderecoTemporario() {
-    	return this.enderecoTemporario;
+    	return Integer.parseInt(this.enderecoTemporario, 2);
     }
 
     public void verificaEstadoDaMemoria() {

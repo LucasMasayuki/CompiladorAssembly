@@ -33,69 +33,69 @@ class Firmware {
             "00000000000000100001000000001",
             "00000000010000000000100000000"
         },
-        // Comando mov ax,(n�mero/registrador)***
+        // Comando mov ax,(numero/registrador)***
         {
             "00000100000000100000000000000"
         },
-        // Comando mov bx,(n�mero/registrador)***
+        // Comando mov bx,(numero/registrador)***
         {
             "00000001000000100000000000000"
         },
-        // Comando mov cx,(n�mero/registrador)***
+        // Comando mov cx,(numeroo/registrador)***
         {
             "00000000010000100000000000000"
         },
-        // Comando mov dx,(n�mero/registrador)***
+        // Comando mov dx,(numero/registrador)***
         {
             "00000000000100100000000000000"
         },
-        // Comando mov ax,(endere�o)
+        // Comando mov ax,(endereco)
         {
             "00100000000000100000000000000",
             "00000000000000000000100010000",
             "00000000000000000000000101000",
             "00001100000000000000000000000"
         },
-        // Comando mov bx,(endere�o)
+        // Comando mov bx,(endereco)
         {
             "00100000000000100000000000000",
             "00000000000000000000100010000",
             "00000000000000000000000101000",
             "00001001000000000000000000000"
         },
-        // Comando mov cx,(endere�o)
+        // Comando mov cx,(endereco)
         {
             "00100000000000100000000000000",
             "00000000000000000000100010000",
             "00000000000000000000000101000",
             "00001000010000000000000000000"
         },
-        // Comando mov dx,(endere�o)
+        // Comando mov dx,(endereco)
         {
             "00100000000000100000000000000",
             "00000000000000000000100010000",
             "00000000000000000000000101000",
             "00001000000100000000000000000"
         },
-    	// Comando sub ax,(n�mero/registrador)***
+    	// Comando sub ax,(numero/registrador)***
     	{
     		"00000000000000001010000000000", 
     		"00000000000000100001000000010",
     		"00000100000000000000100000000"
     	},
-        // Comando sub bx,(n�mero/registrador)***
+        // Comando sub bx,(numero/registrador)***
         {
             "00000000000000001010000000000", 
             "00000000000000100001000000010",
             "00000001000000000000100000000"
         },
-        // Comando sub cx,(n�mero/registrador)***
+        // Comando sub cx,(numero/registrador)***
         {
             "00000000000000001010000000000", 
             "00000000000000100001000000010",
             "00000000010000000000100000000"
         },
-        // Comando sub dx,(n�mero/registrador)***
+        // Comando sub dx,(numero/registrador)***
         {
             "00000000000000001010000000000", 
             "00000000000000100001000000010",
@@ -165,7 +165,58 @@ class Firmware {
         },
     };
 
-    public String[] getSinaisDeControle(int indice) {
+    public String[] getSinaisDeControle(int indice, Palavra ir) {
+
+    	if (indice ==  0) {
+    		return sinaisDeControle[indice];
+    	}
+
+    	System.out.print(indice);
+
+    	Uc uc = new Uc();
+    	if (ir.getOpcode() == "add") {
+    		indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    		// como diferenciar numeros de enderecos
+    	} else if (ir.getOpcode() == "mov") {
+    		indice += 4;
+    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    		}
+    	} else if (ir.getOpcode() == "sub") {
+    		indice += 10;
+    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    		}
+    	} else if (ir.getOpcode() == "mul") {
+    		indice += 14;
+    	} else if (ir.getOpcode() == "div") {
+    		indice += 15;
+    	} else if (ir.getOpcode() == "inc") {
+    		indice += 16;
+    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    		}
+    	} else if (ir.getOpcode() == "dec") {
+    		indice += 20;
+    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    		}
+    	} else if (ir.getOpcode() == "cmp") {
+    		indice += 24;
+    	} else if (ir.getOpcode() == "jmp") {
+    		indice += 25;
+    	}
+
         return this.sinaisDeControle[indice];
+    }
+    
+    public String[] getSinaisDeControleParaMostrarNaTela(int indice, Firmware firmware, Memoria memoria, int atual) {
+    	Uc uc = new Uc();
+    	uc.cicloDeBusca(firmware, memoria, atual);
+    	return getSinaisDeControle(indice, uc.getIr());
+    }
+    
+    public int tamanhoSinal(int indice) {
+    	return this.sinaisDeControle[indice].length;
     }
 }
