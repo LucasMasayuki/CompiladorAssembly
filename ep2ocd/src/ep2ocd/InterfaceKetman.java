@@ -185,7 +185,7 @@ public class InterfaceKetman extends JFrame {
 						theend = firmware.tamanhoSinal(indice);
 						
 						if (theend != atual) {
-							Object resposta[][] = uc.cicloDeExecucao(firmware, indice, atual);
+							Object resposta[][] = uc.cicloDeExecucao(firmware, indice, atual, memoria);
 
 							reset();
 							String[] coluna = {"Componente", "valor"};
@@ -214,13 +214,14 @@ public class InterfaceKetman extends JFrame {
 		StringBuilder textExec;
 		
 		Uc temp = new Uc();
+		int atual = 0;
 
-		for (int i = 0; i < end; i++) {
+		while (end != atual) {
 			firmware = new Firmware();
 			textBusca = new StringBuilder();
 			textBusca = temp.cicloDeBuscaParaMostrarNaTela(firmware, memoria);
 			builder.append(textBusca);
-			Palavra palavra = (Palavra)memoria.getProcesso(i).dados;
+			Palavra palavra = (Palavra) memoria.getProcesso(atual).dados;
 
 			int indice = Integer.parseInt(palavra.getOpcode(), 2);
 
@@ -228,6 +229,7 @@ public class InterfaceKetman extends JFrame {
 			textExec = temp.cicloDeExecucaoParaMostrarNaTela(firmware, indice, memoria);
 
 			builder.append(textExec);
+			atual++;
 		}
 
 		txtpnA.setText(builder.toString());

@@ -10,8 +10,8 @@ class Memoria {
     	return Integer.toHexString(linha);
     }
 
-    public void novoProcesso(Palavra palavra) {
-        Processo processo = new Processo(enderecoEmHexadecimal(this.linha), palavra);
+    public void novoProcesso(Object dados) {
+        Processo processo = new Processo(enderecoEmHexadecimal(this.linha), dados);
         filaDeProcesso.addLast(processo);
         this.linha++;
     }
