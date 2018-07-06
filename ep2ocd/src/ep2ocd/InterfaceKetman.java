@@ -45,8 +45,8 @@ public class InterfaceKetman extends JFrame {
 	 * Create the frame.
 	 */
 	public InterfaceKetman() {
+		setTitle("Compilador assembly");
 		setName("Compilador Assembly");
-		setExtendedState(Frame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -101,9 +101,11 @@ public class InterfaceKetman extends JFrame {
 		btnExecutar.setActionCommand("OK");
 		contentPane.add(btnExecutar);
 		txtpnA = new JTextPane();
+		txtpnA.setSize(new Dimension(2000, 2000));
+		txtpnA.setMaximumSize(new Dimension(1000, 1000));
 		txtpnA.setEditable(false);
 		txtpnA.setText("Nao possui comandos");
-		txtpnA.setBounds(622, 38, 890, 798);
+		txtpnA.setBounds(622, 38, 656, 615);
 		contentPane.add(txtpnA);
 	}
 	
@@ -203,24 +205,27 @@ public class InterfaceKetman extends JFrame {
 			}
 		});
 
-		txtpnA.setBounds(622, 38, 890, 798);
+		txtpnA.setBounds(622, 38, 656, 615);
+		txtpnA.setMaximumSize(new Dimension(1000, 1000));
 		contentPane.add(txtpnA);
 		
 		StringBuilder builder = new StringBuilder();
 		StringBuilder textBusca;
 		StringBuilder textExec;
+		
+		Uc temp = new Uc();
 
 		for (int i = 0; i < end; i++) {
 			firmware = new Firmware();
 			textBusca = new StringBuilder();
-			textBusca = uc.cicloDeBuscaParaMostrarNaTela(firmware, memoria);
+			textBusca = temp.cicloDeBuscaParaMostrarNaTela(firmware, memoria);
 			builder.append(textBusca);
 			Palavra palavra = (Palavra)memoria.getProcesso(i).dados;
 
 			int indice = Integer.parseInt(palavra.getOpcode(), 2);
 
 			textExec = new StringBuilder();
-			textExec = uc.cicloDeExecucaoParaMostrarNaTela(firmware, indice, memoria);
+			textExec = temp.cicloDeExecucaoParaMostrarNaTela(firmware, indice, memoria);
 
 			builder.append(textExec);
 		}

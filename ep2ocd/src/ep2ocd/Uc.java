@@ -62,7 +62,6 @@ class Uc {
 
     public Object[][] cicloDeBusca(Firmware firmware, Memoria memoria, int atual) {
     	String[] sinais = firmware.getSinaisDeControle(0, this.ir);
-    	System.out.print(sinais);
     	for (int jota = 0; jota < sinais[atual].length(); jota++) {
 	    	if (jota == 1 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(jota + 1) == '1') {
     			this.mar = this.pc;

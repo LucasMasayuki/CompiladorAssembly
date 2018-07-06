@@ -34,6 +34,7 @@ class Memoria {
     }
     
     public int getEnderecoTemporario() {
+    	System.out.println("end " +this.enderecoTemporario);
     	return Integer.parseInt(this.enderecoTemporario, 2);
     }
 

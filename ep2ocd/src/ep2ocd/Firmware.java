@@ -194,6 +194,7 @@ class Firmware {
             "10000000000000001000000000000101",
         },
     };
+    private Uc uc = new Uc();
 
     public String[] getSinaisDeControle(int indice, Palavra ir) {
 
@@ -203,7 +204,6 @@ class Firmware {
 
     	System.out.print(indice);
 
-    	Uc uc = new Uc();
     	if (ir.getOpcode() == "add") {
     		indice += Integer.parseInt(ir.getOperandoUm(), 2);
     		// como diferenciar numeros de enderecos
@@ -240,9 +240,8 @@ class Firmware {
         return this.sinaisDeControle[indice];
     }
     
-    public String[] getSinaisDeControleParaMostrarNaTela(int indice, Firmware firmware, Memoria memoria, int atual) {
-    	Uc uc = new Uc();
-    	uc.cicloDeBusca(firmware, memoria, atual);
+    public String[] getSinaisDeControleParaMostrarNaTela(int indice, Firmware firmware, Memoria memoria) {
+    	uc.cicloDeBuscaDireto(firmware, memoria);
     	return getSinaisDeControle(indice, uc.getIr());
     }
     
