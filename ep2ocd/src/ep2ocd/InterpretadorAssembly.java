@@ -36,19 +36,25 @@ class InterpretadorAssembly {
         }
         
         boolean eUmRegistrador = false;
+        boolean eEndereco = false;
 
         if (uc.verificaSeUmRegistradorValido(instrucao.toString())) {
             operandoUm = uc.getComandoBinario(instrucao.toString());
             eUmRegistrador = true;
         } else {
-        	converte = Integer.parseInt(instrucao.toString(), 16);
+        	if (instrucao.charAt(0) == '[') {
+            	converte = (int) Long.parseLong(instrucao.toString().substring(1,instrucao.length() - 1), 16);
+            	eEndereco = true;
+        	} else {
+        		converte = (int) Long.parseLong(instrucao.toString(), 16);
+        	}
             operandoUm = Integer.toString(converte, 2);
         }
 
         instrucao = new StringBuilder();
 
         if (comando.length() == i) {
-            palavra = new Palavra(opcode, operandoUm, eUmRegistrador);
+            palavra = new Palavra(opcode, operandoUm, eUmRegistrador, eEndereco);
         } else {
             while (comando.length() != i){
                 instrucao.append(comando.charAt(i));
@@ -58,11 +64,16 @@ class InterpretadorAssembly {
             if (uc.verificaSeUmRegistradorValido(instrucao.toString())) {
             	operandoDois = uc.getComandoBinario(instrucao.toString());
             } else {
-            	converte = Integer.parseInt(instrucao.toString());
+            	if (instrucao.charAt(0) == '[') {
+                	converte = (int) Long.parseLong(instrucao.toString().substring(1,instrucao.length() - 1), 16);
+                	eEndereco = true;
+            	} else {
+                	converte = (int) Long.parseLong(instrucao.toString(), 16);
+            	}
             	operandoDois = Integer.toString(converte, 2);
             }
 
-            palavra = new Palavra(opcode, operandoUm, operandoDois, eUmRegistrador);
+            palavra = new Palavra(opcode, operandoUm, operandoDois, eUmRegistrador, eEndereco);
         }
 
         memoria.novoProcesso(palavra);

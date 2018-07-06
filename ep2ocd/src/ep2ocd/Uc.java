@@ -76,7 +76,7 @@ class Uc {
     			ula.setX(Integer.toBinaryString(1));
     			ula.setY(pc);
     		}
-	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
+	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(19) == '1') {
     			this.pc = Integer.toHexString(ula.getResultado(res));
     		}
 	
@@ -87,7 +87,7 @@ class Uc {
     			this.mbr = memoria.getProcesso(memoria.getEnderecoTemporario());
     		}
 	    	if (jota == 4 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(15) == '1' && sinais[atual].charAt(17) == '1') {
-    			this.ir = this.mbr.palavra;
+    			this.ir = (Palavra) this.mbr.dados;
     		}
 		}
 
@@ -103,7 +103,8 @@ class Uc {
     	if (this.mbr == null) {
     		binarioMbr = "0";
     	} else {
-    		binarioMbr = this.mbr.palavra.getPalavraCompleta();
+    		Palavra palavra = (Palavra) this.mbr.dados;
+    		binarioMbr = palavra.getPalavraCompleta();
     	}
    
 		Object[][] dados = {
@@ -139,17 +140,17 @@ class Uc {
 		    		builder.append("t1: x <- pc  \n");
 		    		builder.append("t1: y <- 1  \n");
 	    		}
-		    	if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(20) == '1') {
-		    		builder.append("t3: pc <- ula \n");
+		    	if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(19) == '1') {
+		    		builder.append("t2: pc <- ula \n");
 	    		} 
 		    	if (jota == 22 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(24) == '1') {
-		    		builder.append("t3: memoria <- mar \n");
+		    		builder.append("t2: memoria <- mar \n");
 	    		} 
 		    	if (jota == 23 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(25) == '1') {
-		    		builder.append("t4: mbr <- memoria \n");
+		    		builder.append("t3: mbr <- memoria \n");
 	    		} 
 		    	if (jota == 4 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(15) == '1' && sinais[i].charAt(17) == '1') {
-		    		builder.append("t5: ir <- mbr \n");
+		    		builder.append("t4: ir <- mbr \n");
 	    		}
 			}
     	}
@@ -176,7 +177,7 @@ class Uc {
     	StringBuilder builder = new StringBuilder();
 		int end = memoria.getLinha();
     	while (!acabou) {
-    		if (end != atual) {
+    		if (end + 1 != atual) {
 		    	String[] sinaisDeControle = firmware.getSinaisDeControleParaMostrarNaTela(indice, firmware, memoria, atual);
 		    	for (int i = 0; i < sinaisDeControle.length; i++) {
 		    		switch (sinaisDeControle[i]) {
@@ -283,7 +284,8 @@ class Uc {
     	if (this.mbr == null) {
     		binarioMbr = "0";
     	} else {
-    		binarioMbr = this.mbr.palavra.getPalavraCompleta();
+    		Palavra palavra = (Palavra) this.mbr.dados;
+    		binarioMbr = palavra.getPalavraCompleta();
     	}
    
 		Object[][] dados = {

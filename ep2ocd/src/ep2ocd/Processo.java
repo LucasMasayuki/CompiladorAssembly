@@ -1,10 +1,10 @@
 package ep2ocd;
 class Processo {
 	public String endereco;
-	public Palavra palavra;
+	public Object dados;
 
-	public Processo(String endereco, Palavra palavra) {
+	public Processo(String endereco, Object dados) {
 		this.endereco = endereco;
-		this.palavra = palavra;
+		this.dados = dados;
 	}
 }

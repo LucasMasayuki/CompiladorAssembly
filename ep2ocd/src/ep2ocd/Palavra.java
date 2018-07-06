@@ -5,18 +5,21 @@ public class Palavra {
 	private String operandoUm;
 	private String operandoDois;
 	private boolean eUmRegistrador;
+	private boolean eUmEndereco;
 
-	public Palavra(String opcode, String operandoUm, boolean eUmRegistrador) {
+	public Palavra(String opcode, String operandoUm, boolean eUmRegistrador, boolean eUmEndereco) {
 		this.opcode = opcode;
 		this.operandoUm = operandoUm;
 		this.eUmRegistrador = eUmRegistrador;
+		this.eUmEndereco = eUmEndereco;
 	}
 	
-	public Palavra(String opcode, String operandoUm, String operandoDois, boolean eUmRegistrador) {
+	public Palavra(String opcode, String operandoUm, String operandoDois, boolean eUmRegistrador, boolean eUmEndereco) {
 		this.opcode = opcode;
 		this.operandoUm = operandoUm;
 		this.operandoDois = operandoDois;
 		this.eUmRegistrador = eUmRegistrador;
+		this.eUmEndereco = eUmEndereco;
 	}
 
 	public String getOpcode() {
@@ -42,6 +45,10 @@ public class Palavra {
 	
 	public boolean getEUmRegistrador() {
 		return this.eUmRegistrador;
+	}	
+
+	public boolean getEUmEndereco() {
+		return this.eUmEndereco;
 	}
 	
 	public String getPalavraCompleta() {

@@ -215,9 +215,9 @@ public class InterfaceKetman extends JFrame {
 			textBusca = new StringBuilder();
 			textBusca = uc.cicloDeBuscaParaMostrarNaTela(firmware, memoria);
 			builder.append(textBusca);
-			Processo processo = memoria.getProcesso(i);
+			Palavra palavra = (Palavra)memoria.getProcesso(i).dados;
 
-			int indice = Integer.parseInt(processo.palavra.getOpcode(), 2);
+			int indice = Integer.parseInt(palavra.getOpcode(), 2);
 
 			textExec = new StringBuilder();
 			textExec = uc.cicloDeExecucaoParaMostrarNaTela(firmware, indice, memoria);

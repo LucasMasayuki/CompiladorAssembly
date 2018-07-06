@@ -1,7 +1,8 @@
 package ep2ocd;
 import java.util.LinkedList;
 class Memoria {
-    private LinkedList<Processo> filaDeProcesso = new LinkedList<Processo>(); 
+    private LinkedList<Processo> filaDeProcesso = new LinkedList<Processo>();
+    private LinkedList<Processo> pilhaDeMemoria = new LinkedList<Processo>();
     private int linha = 0;
     private String enderecoTemporario;
 
@@ -38,8 +39,9 @@ class Memoria {
 
     public void verificaEstadoDaMemoria() {
     	for (Processo processo : filaDeProcesso) {
-    		System.out.println("linha: " + processo.endereco + " palavra: " + processo.palavra
-    			.getOpcode() + processo.palavra.getOperandoUm() + processo.palavra.getOperandoDois());
+    		Palavra palavra = (Palavra) processo.dados;
+    		System.out.println("linha: " + processo.endereco + " palavra: " + palavra
+    			.getOpcode() + palavra.getOperandoUm() + palavra.getOperandoDois());
     	}
     }
 }
