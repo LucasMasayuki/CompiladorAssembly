@@ -11,6 +11,7 @@ class Uc {
     private String bx = "0";
     private String cx = "0";
     private String dx = "0";
+    private int flag = 0;
     private int flagE = 0;
     private int flagNe = 0;
     private int flagG = 0;
@@ -62,7 +63,6 @@ class Uc {
 
     public Object[][] cicloDeBusca(Firmware firmware, Memoria memoria, int atual) {
     	String[] sinais = firmware.getSinaisDeControle(0, this.ir);
-    	System.out.print(sinais);
     	for (int jota = 0; jota < sinais[atual].length(); jota++) {
 	    	if (jota == 1 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(jota + 1) == '1') {
     			this.mar = this.pc;
@@ -75,9 +75,10 @@ class Uc {
     	    	res = binario.toString();
     			ula.setX(Integer.toBinaryString(1));
     			ula.setY(pc);
+    			ula.setTipo(res);
     		}
-	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
-    			this.pc = Integer.toHexString(ula.getResultado(res));
+	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(19) == '1') {
+    			this.pc = Integer.toHexString(ula.getResultado());
     		}
 	
 	    	if (jota == 21 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(24) == '1') {
@@ -87,7 +88,7 @@ class Uc {
     			this.mbr = memoria.getProcesso(memoria.getEnderecoTemporario());
     		}
 	    	if (jota == 4 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(15) == '1' && sinais[atual].charAt(17) == '1') {
-    			this.ir = this.mbr.palavra;
+    			this.ir = (Palavra) this.mbr.dados;
     		}
 		}
 
@@ -103,7 +104,8 @@ class Uc {
     	if (this.mbr == null) {
     		binarioMbr = "0";
     	} else {
-    		binarioMbr = this.mbr.palavra.getPalavraCompleta();
+    		Palavra palavra = (Palavra) this.mbr.dados;
+    		binarioMbr = palavra.getPalavraCompleta();
     	}
    
 		Object[][] dados = {
@@ -139,23 +141,58 @@ class Uc {
 		    		builder.append("t1: x <- pc  \n");
 		    		builder.append("t1: y <- 1  \n");
 	    		}
-		    	if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(20) == '1') {
-		    		builder.append("t3: pc <- ula \n");
+		    	if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(19) == '1') {
+		    		builder.append("t2: pc <- ula \n");
 	    		} 
 		    	if (jota == 22 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(24) == '1') {
-		    		builder.append("t3: memoria <- mar \n");
+		    		builder.append("t2: memoria <- mar \n");
 	    		} 
 		    	if (jota == 23 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(25) == '1') {
-		    		builder.append("t4: mbr <- memoria \n");
+		    		builder.append("t3: mbr <- memoria \n");
 	    		} 
 		    	if (jota == 4 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(15) == '1' && sinais[i].charAt(17) == '1') {
-		    		builder.append("t5: ir <- mbr \n");
+		    		builder.append("t4: ir <- mbr \n");
 	    		}
 			}
     	}
  
     	return builder;
     }
+    
+    public void cicloDeBuscaDireto(Firmware firmware, Memoria memoria) {
+     	String[] sinais = firmware.getSinaisDeControle(0, this.ir);
+    	StringBuilder builder = new StringBuilder();
+  
+     	for (int i = 0; i < sinais.length; i++) {
+ 	    	for (int jota = 0; jota < sinais[i].length(); jota++) {
+		    	if (jota == 1 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(jota + 1) == '1') {
+ 	    			this.mar = this.pc;
+ 	    		}
+ 		    	if (jota == 19 && sinais[i].charAt(jota) == '1') {
+ 	    			StringBuilder binario = new StringBuilder();
+ 	    			binario.append(sinais[i].charAt(26));
+ 	    			binario.append(sinais[i].charAt(27));
+ 	    			binario.append(sinais[i].charAt(28));
+	    	    	res = binario.toString();
+ 	    			ula.setX(Integer.toBinaryString(1));
+ 	    			ula.setY(pc);
+ 	    			ula.setTipo(res);
+ 	    		}
+ 		    	if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(19) == '1') {
+ 	    			this.pc = Integer.toHexString(ula.getResultado());
+ 	    		}
+		    	if (jota == 21 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(24) == '1') {
+ 	    			memoria.setEnderecoTemporario(this.mar);
+ 	    		} 
+ 		    	if (jota == 23 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(25) == '1') {
+ 	    			this.mbr = memoria.getProcesso(memoria.getEnderecoTemporario());
+	    		}
+ 		    	if (jota == 4 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(15) == '1' && sinais[i].charAt(17) == '1') {
+ 	    			this.ir = (Palavra) this.mbr.dados;
+ 	    		}
+ 			}
+     	}
+     }
 
     public StringBuilder cicloDeExecucaoParaMostrarNaTela(Firmware firmware, int indice, Memoria memoria) {
 //    	Barramento barramento = new Barramento();
@@ -172,87 +209,168 @@ class Uc {
 //	    	}
 //    	}
     	int atual = 0;
-    	boolean acabou = false;
     	StringBuilder builder = new StringBuilder();
 		int end = memoria.getLinha();
-    	while (!acabou) {
-    		if (end != atual) {
-		    	String[] sinaisDeControle = firmware.getSinaisDeControleParaMostrarNaTela(indice, firmware, memoria, atual);
-		    	for (int i = 0; i < sinaisDeControle.length; i++) {
-		    		switch (sinaisDeControle[i]) {
-		    			case "00000000000000001010000000000":
-				    		builder.append("t1: x <- irp1  \n");
-				    		break;
-		
-		    			case "00000000000000100001000000001":
-				    		builder.append("t2: y <- irp2  \n");
-				    		break;
-		
-		    			case "00000100000000000000100000000":
-				    		builder.append("t3 :ax <- ula  \n");
-				    		break;
-		
-		    			case "00000001000000000000100000000":
-				    		builder.append("t3: bx <- ula  \n");
-				    		break;
-		
-		    			case "00000000010000000000100000000":
-				    		builder.append("t3: cx <- ula  \n");
-				    		break;
-		
-		    			case "00000000000100000000100000000":
-				    		builder.append("t3: dx <- ula  \n");
-				    		break;
-		
-		    			case "00000100000000100000000000000":
-				    		builder.append("t1: ax <- irp2  \n");
-				    		break;
-		
-		    			case "00000001000000100000000000000":
-				    		builder.append("t1: bx <- irp2  \n");
-				    		break;
-		
-		    			case "00000000010000100000000000000":
-				    		builder.append("t1: cx <- irp2  \n");
-				    		break;
-		
-		    			case "00000000000100100000000000000":
-				    		builder.append("t1: dx <- irp2  \n");
-				    		break;
-		    		}	
-		    	}
-    		} else {
-    			acabou = true;
-    		}
+		while (end + 1 > atual) {
+	    	String[] sinaisDeControle = firmware.getSinaisDeControleParaMostrarNaTela(indice, firmware, memoria);
+	    	for (int i = 0; i < sinaisDeControle.length; i++) {
+	    		switch (sinaisDeControle[i]) {
+	    			case "00000000000000001010000000000000":
+			    		builder.append("t1: x <- irp1  \n");
+			    		break;
+	
+	    			case "00000000000000100001000000001000":
+			    		builder.append("t2: y <- irp2  \n");
+			    		break;
+	
+	    			case "00000100000000000000100000000000":
+			    		builder.append("t3 :ax <- ula  \n");
+			    		break;
+	
+	    			case "00000001000000000000100000000000":
+			    		builder.append("t3: bx <- ula  \n");
+			    		break;
+	
+	    			case "00000000010000000000100000000000":
+			    		builder.append("t3: cx <- ula  \n");
+			    		break;
+	
+	    			case "00000000000100000000100000000000":
+			    		builder.append("t3: dx <- ula  \n");
+			    		break;
+	
+	    			case "00000100000000100000000000000000":
+			    		builder.append("t1: ax <- irp2  \n");
+			    		break;
+	
+	    			case "00000001000000100000000000000000":
+			    		builder.append("t1: bx <- irp2  \n");
+			    		break;
+	
+	    			case "00000000010000100000000000000000":
+			    		builder.append("t1: cx <- irp2  \n");
+			    		break;
+	
+	    			case "00000000000100100000000000000000":
+			    		builder.append("t1: dx <- irp2  \n");
+			    		break;
+			    		
+	    			case "00100000000000100000000000000000":
+			    		builder.append("t1: mar <- irp2  \n");
+			    		break;
+
+	    			case "00000000000000000000010010000000":
+			    		builder.append("t2: memoria <- mar  \n");
+			    		break;
+			    		
+	    			case "00000000000000000000000101000000":
+			    		builder.append("t3: mbr <- memoria  \n");
+			    		break;
+			    	
+	    			case "00001100000000000000000000000000":
+			    		builder.append("t4: ax <- mbr  \n");
+			    		break;
+			    		
+	    			case "00001001000000000000000000000000":
+			    		builder.append("t4: bx <- mbr  \n");
+			    		break;
+			    		
+	    			case "00001000010000000000000000000000":
+			    		builder.append("t4: cx <- mbr  \n");
+			    		break;
+			    		
+	    			case "00001000000100000000000000000000":
+			    		builder.append("t4: dx <- mbr  \n");
+			    		break;
+			    		
+	    			case "00000000000000100001000000010000":
+			    		builder.append("t1: y <- irp1  \n");
+			    		break;
+			    	
+	    			case "00000010000000000001000000000000":
+			    		builder.append("t1: y <- ax  \n");
+			    		break;
+			    		
+	    			case "00000000000000001010000000100000":
+			    		builder.append("t2: x <- irp1  \n");
+			    		break;
+			    		
+	    			case "00000000000000001010000000011000":
+			    		builder.append("t2: x <- irp1  \n");
+			    		break;
+			    		
+	    			case "00000000000000001010000000101000":
+			    		builder.append("t1: x <- irp1  \n");
+			    		break;
+			    		
+	    			case "00000000000000001010000000110000":
+			    		builder.append("t1: x <- irp1  \n");
+			    		break;
+			    		
+	    			case "00000000000000100001000000111000":
+			    		builder.append("t2: x <- irp2  \n");
+			    		break;
+			    		
+	    			case "10000000000000001000000000000001":
+			    		builder.append("t1: pc <- irp1  \n");
+			    		break;
+			    		
+	    			case "10000000000000001000000000000010":
+			    		builder.append("t1: pc <- irp1  \n");
+			    		break;
+			    		
+	    			case "10000000000000001000000000000011":
+			    		builder.append("t1: pc <- irp1  \n");
+			    		break;
+			    		
+	    			case "10000000000000001000000000000100":
+			    		builder.append("t1: pc <- irp1  \n");
+			    		break;
+			 
+	    			case "10000000000000001000000000000101":
+			    		builder.append("t1: pc <- irp1  \n");
+			    		break;
+			    	
+	    			case "10000000000000001000000000000110":
+			    		builder.append("t1: pc <- irp1  \n");
+			    		break;
+			    		
+	    			case "10000000000000001000000000000111":
+			    		builder.append("t1: pc <- irp1  \n");
+			    		break;
+	    		}	
+	    	}
+	    	atual++;
     	}
     	return builder;
     }
     
-    public Object[][] cicloDeExecucao(Firmware firmware, int indice, int atual) {
+    public Object[][] cicloDeExecucao(Firmware firmware, int indice, int atual, Memoria memoria) {
     	String[] sinaisDeControle = firmware.getSinaisDeControle(indice, this.ir);
 		switch (sinaisDeControle[atual]) {
-			case "00000000000000001010000000000":
+			case "00000000000000001010000000000000":
 				ula.setX(this.ir.getOperandoUm());
 	    		break;
 
-			case "00000000000000100001000000001":
+			case "00000000000000100001000000001000":
 				ula.setY(this.ir.getOperandoDois());
+				ula.setTipo("001");
 	    		break;
 
 			case "00000100000000000000100000000":
-	    		this.ax = Integer.toString(ula.getResultado("001"));
+	    		this.ax = Integer.toString(ula.getResultado());
 	    		break;
 
 			case "00000001000000000000100000000":
-	    		this.bx = Integer.toString(ula.getResultado("001"));
+	    		this.bx = Integer.toString(ula.getResultado());
 	    		break;
 
 			case "00000000010000000000100000000":
-	    		this.cx = Integer.toString(ula.getResultado("001"));
+	    		this.cx = Integer.toString(ula.getResultado());
 	    		break;
 
 			case "00000000000100000000100000000":
-	    		this.dx = Integer.toString(ula.getResultado("001"));
+	    		this.dx = Integer.toString(ula.getResultado());
 	    		break;
 
 			case "00000100000000100000000000000":
@@ -270,7 +388,112 @@ class Uc {
 			case "00000000000100100000000000000":
 				this.dx = this.ir.getOperandoDois();
 	    		break;
+				
+			case "00100000000000100000000000000000":
+	    		this.mar = this.ir.getOperandoDois();
+	    		break;
+
+			case "00000000000000000000010010000000":
+	    		memoria.setEnderecoTemporario(this.mar);
+	    		break;
+	    		
+//			case "00000000000000000000000101000000":
+//	    		this.mbr = memoria.getEnderecoTemporario();
+//	    		break;
+	    	
+			case "00001100000000000000000000000000":
+	    		this.ax = this.mbr.endereco;
+	    		break;
+	    		
+			case "00001001000000000000000000000000":
+	    		this.bx = this.mbr.endereco;
+	    		break;
+	    		
+			case "00001000010000000000000000000000":
+	    		this.cx = this.mbr.endereco;
+	    		break;
+	    		
+			case "00001000000100000000000000000000":
+	    		this.dx = this.mbr.endereco;
+	    		break;
+	    		
+			case "00000000000000100001000000010000":
+	    		ula.setY(this.ir.getOperandoUm());
+	    		ula.setTipo("010");
+	    		break;
+	    	
+			case "00000010000000000001000000000000":
+	    		ula.setY(this.ax);
+	    		break;
+	    		
+			case "00000000000000001010000000100000":
+	    		ula.setX(this.ir.getOperandoUm());
+	    		ula.setTipo("010");
+	    		break;
+	    		
+			case "00000000000000001010000000011000":
+	    		ula.setX(this.ir.getOperandoUm());
+	    		ula.setTipo("011");
+	    		break;
+	    		
+			case "00000000000000001010000000101000":
+	    		ula.setX(this.ir.getOperandoUm());
+	    		ula.setTipo("101");
+	    		break;
+	    		
+			case "00000000000000001010000000110000":
+	    		ula.setX(this.ir.getOperandoUm());
+	    		ula.setTipo("110");
+	    		break;
+	    		
+			case "00000000000000100001000000111000":
+	    		ula.setX(this.ir.getOperandoDois());
+	    		ula.setTipo("111");
+	    		break;
+	    		
+			case "10000000000000001000000000000001":
+				if (this.flag == 1) {
+		    		this.pc = this.ir.getOperandoUm();
+				}
+	    		break;
+	    		
+			case "10000000000000001000000000000010":
+				if (this.flagE == 1) {
+		    		this.pc = this.ir.getOperandoUm();
+				}
+	    		break;
+	    		
+			case "10000000000000001000000000000011":
+				if (this.flagNe == 1) {
+		    		this.pc = this.ir.getOperandoUm();
+				}
+	    		break;
+	    		
+			case "10000000000000001000000000000100":
+				if (this.flagL == 1) {
+		    		this.pc = this.ir.getOperandoUm();
+				}
+	    		break;
+	 
+			case "10000000000000001000000000000101":
+				if (this.flagLe == 1) {
+		    		this.pc = this.ir.getOperandoUm();
+				}
+	    		break;
+	    	
+			case "10000000000000001000000000000110":
+				if (this.flagG == 1) {
+		    		this.pc = this.ir.getOperandoUm();
+				}
+	    		break;
+	    		
+			case "10000000000000001000000000000111":
+				if (this.flagGe == 1) {
+		    		this.pc = this.ir.getOperandoUm();
+				}
+	    		break;
 		}
+
 		String binarioIr;
     	String binarioMbr;
 
@@ -283,7 +506,8 @@ class Uc {
     	if (this.mbr == null) {
     		binarioMbr = "0";
     	} else {
-    		binarioMbr = this.mbr.palavra.getPalavraCompleta();
+    		Palavra palavra = (Palavra) this.mbr.dados;
+    		binarioMbr = palavra.getPalavraCompleta();
     	}
    
 		Object[][] dados = {
