@@ -14,13 +14,14 @@ public class Palavra {
 		this.operandoUm = operandoUm;
 		this.op1eUmRegistrador = op1eUmRegistrador;
 		this.op1eUmEndereco = op1eUmEndereco;
+        System.out.println(op1eUmRegistrador);
 	}
 	
 	public Palavra(String opcode, String operandoUm, String operandoDois, boolean op1eUmRegistrador, boolean op1eUmEndereco, boolean op2eUmEndereco, boolean op2eUmRegistrador) {
 		this.opcode = opcode;
 		this.operandoUm = operandoUm;
 		this.operandoDois = operandoDois;
-		this.op1eUmRegistrador = op1eUmEndereco;
+		this.op1eUmRegistrador = op1eUmRegistrador;
 		this.op1eUmEndereco = op1eUmEndereco;
 		this.op2eUmRegistrador = op2eUmRegistrador;
 		this.op2eUmEndereco = op2eUmEndereco;

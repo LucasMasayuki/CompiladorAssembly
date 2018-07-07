@@ -1,10 +1,7 @@
 package ep2ocd;
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,7 +10,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.RootPaneContainer;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -23,9 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import java.awt.Frame;
 
 public class InterfaceKetman extends JFrame {
 
@@ -37,9 +31,8 @@ public class InterfaceKetman extends JFrame {
 	private ArrayList<String> comandos = new ArrayList<String>();
 	private JTextPane txtpnA;
 	private static InterfaceKetman frame;
-	private Firmware firmware;
+	private Firmware firmware= new Firmware();
 	private JTable table;
-	private boolean first = true;
 	private int atual = 0;
 	private int theend = 0;
 	private boolean busca = true;
@@ -171,12 +164,11 @@ public class InterfaceKetman extends JFrame {
 			public void keyPressed(KeyEvent e) {
 
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					if (indicaFim < end + 1) {
+					if (indicaFim < end) {
 						if (busca) {
 							if (atual > 3) {
 								busca = false;
 								atual = 0;
-								indicaFim++;
 							} else {
 								Object resposta[][] = uc.cicloDeBusca(firmware, memoria, atual);
 								reset();
@@ -235,22 +227,21 @@ public class InterfaceKetman extends JFrame {
 		StringBuilder textExec;
 		
 		Uc temp = new Uc();
-		int atual = 0;
+		int agora = 0;
 
-		while (end != atual) {
-			firmware = new Firmware();
+		Firmware newfirmware = new Firmware();
+		while (end != agora) {
 			textBusca = new StringBuilder();
-			textBusca = temp.cicloDeBuscaParaMostrarNaTela(firmware, memoria);
+			textBusca = temp.cicloDeBuscaParaMostrarNaTela(newfirmware, memoria);
 			builder.append(textBusca);
-			Palavra palavra = (Palavra) memoria.getProcesso(atual).dados;
-
-			int indice = Integer.parseInt(palavra.getOpcode(), 2);
+			builder.append(" \n ");
 
 			textExec = new StringBuilder();
-			textExec = temp.cicloDeExecucaoParaMostrarNaTela(firmware, indice, memoria);
+			textExec = temp.cicloDeExecucaoParaMostrarNaTela(newfirmware, memoria);
 
 			builder.append(textExec);
-			atual++;
+			builder.append(" \n ");
+			agora++;
 		}
 
 		txtpnA.setText(builder.toString());

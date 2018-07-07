@@ -43,6 +43,12 @@ class Ula {
     public String getTipo() {
     	return this.tipo;
     }
+    
+    public String incrementaPc() {
+		int xDecimal = Integer.parseInt(this.X, 16);
+		int yDecimal = Integer.parseInt(this.Y, 16);
+		return Integer.toHexString(xDecimal + yDecimal);
+    }
 
     public String getResultado() {
 		int xDecimal = Integer.parseInt(this.X, 2);

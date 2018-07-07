@@ -201,18 +201,18 @@ class Firmware {
     };
     private Uc uc = new Uc();
 
-    public String[] getSinaisDeControle(int indice, Palavra ir) {
-
-    	if (indice ==  0) {
-    		return sinaisDeControle[indice];
+    public String[] getSinaisDeControle(Palavra ir, boolean busca) {
+    	int indice = 0;
+    	if (busca) {
+    		return sinaisDeControle[0];
     	}
  
     	if (ir.getOpcode().equals("1")) {
-    		indice += Integer.parseInt(ir.getOperandoUm(), 2) - 1;
+    		indice += Integer.parseInt(ir.getOperandoUm(), 2);
     	} else if (ir.getOpcode().equals("10")) {
-    		indice += 3;
+    		indice += 5;
     		if (ir.op1eUmRegistrador) {
-    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2) - 1;
     			if (ir.op2eUmEndereco) {
     				indice++;
         			indice += Integer.parseInt(ir.getOperandoUm(), 2);
@@ -221,36 +221,48 @@ class Firmware {
     			indice += 11;
     		}
     	} else if (ir.getOpcode().equals("11")) {
-    		indice += 10;
+    		indice += 14;
     		if (ir.op1eUmRegistrador) {
-    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2) - 1;
     		}
     	} else if (ir.getOpcode().equals("100")) {
-    		indice += 14;
+    		indice += 18;
     	} else if (ir.getOpcode().equals("101")) {
-    		indice += 15;
+    		indice += 19;
     	} else if (ir.getOpcode().equals("111")) {
-    		indice += 16;
+    		indice += 20;
     		if (ir.op1eUmRegistrador) {
-    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2) - 1;
     		}
     	} else if (ir.getOpcode().equals("1000")) {
-    		indice += 20;
+    		indice += 24;
     		if (uc.verificaPeloOpcode(ir.getOperandoUm())) {
     			indice += Integer.parseInt(ir.getOperandoUm(), 2);
     		}
     	} else if (ir.getOpcode().equals("110")) {
-    		indice += 24;
+    		indice += 28;
     	} else if (ir.getOpcode().equals("1001")) {
-    		indice += 25;
+    		indice += 29;
+    	} else if (ir.getOpcode().equals("1010")) {
+    		indice += 30;
+    	} else if (ir.getOpcode().equals("1011")) {
+    		indice += 31;
+    	} else if (ir.getOpcode().equals("1100")) {
+    		indice += 32;
+    	} else if (ir.getOpcode().equals("1101")) {
+    		indice += 33;
+    	} else if (ir.getOpcode().equals("1110")) {
+    		indice += 34;
+    	} else if (ir.getOpcode().equals("1111")) {
+    		indice += 35;
     	}
 
         return this.sinaisDeControle[indice];
     }
     
-    public String[] getSinaisDeControleParaMostrarNaTela(int indice, Firmware firmware, Memoria memoria) {
+    public String[] getSinaisDeControleParaMostrarNaTela(Firmware firmware, Memoria memoria) {
     	uc.cicloDeBuscaDireto(firmware, memoria);
-    	return getSinaisDeControle(indice, uc.getIr());
+    	return getSinaisDeControle(uc.getIr(), false);
     }
     
     public int tamanhoSinal(int indice) {

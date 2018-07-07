@@ -78,7 +78,7 @@ class Uc {
     }
 
     public Object[][] cicloDeBusca(Firmware firmware, Memoria memoria, int atual) {
-    	String[] sinais = firmware.getSinaisDeControle(0, this.ir);
+    	String[] sinais = firmware.getSinaisDeControle(this.ir, true);
     	for (int jota = 0; jota < sinais[atual].length(); jota++) {
 	    	if (jota == 1 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(jota + 1) == '1') {
     			this.mar = this.pc;
@@ -94,7 +94,7 @@ class Uc {
     			ula.setTipo(res);
     		}
 	    	if (jota == 0 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(20) == '1') {
-    			this.pc = Integer.toHexString(Integer.parseInt(ula.getResultado(), 2));
+    			this.pc = ula.incrementaPc();
     		}
 	
 	    	if (jota == 21 && sinais[atual].charAt(jota) == '1' && sinais[atual].charAt(24) == '1') {
@@ -147,7 +147,7 @@ class Uc {
     }
     
     public StringBuilder cicloDeBuscaParaMostrarNaTela(Firmware firmware, Memoria memoria) {
-    	String[] sinais = firmware.getSinaisDeControle(0, this.ir);
+    	String[] sinais = firmware.getSinaisDeControle(this.ir, true);
     	StringBuilder builder = new StringBuilder();
  
     	for (int i = 0; i < sinais.length; i++) {
@@ -176,8 +176,7 @@ class Uc {
     }
     
     public void cicloDeBuscaDireto(Firmware firmware, Memoria memoria) {
-     	String[] sinais = firmware.getSinaisDeControle(0, this.ir);
-  
+     	String[] sinais = firmware.getSinaisDeControle(this.ir, true);
      	for (int i = 0; i < sinais.length; i++) {
  	    	for (int jota = 0; jota < sinais[i].length(); jota++) {
 		    	if (jota == 1 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(jota + 1) == '1') {
@@ -193,8 +192,8 @@ class Uc {
  	    			ula.setY(pc);
  	    			ula.setTipo(res);
  	    		}
- 		    	if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(19) == '1') {
- 	    			this.pc = Integer.toHexString(Integer.parseInt(ula.getResultado(), 2));
+ 		    	if (jota == 0 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(20) == '1') {
+ 	    			this.pc = ula.incrementaPc();
  	    		}
 		    	if (jota == 21 && sinais[i].charAt(jota) == '1' && sinais[i].charAt(24) == '1') {
  	    			memoria.setEnderecoTemporario(this.mar);
@@ -209,25 +208,9 @@ class Uc {
      	}
      }
 
-    public StringBuilder cicloDeExecucaoParaMostrarNaTela(Firmware firmware, int indice, Memoria memoria) {
-//    	Barramento barramento = new Barramento();
-//    	StringBuilder builder = new StringBuilder();
-//    	Object caminhos[][] = new Object[27][27];
-//    	int ind = 0;
-//    	String[] sinaisDeControle = firmware.getSinaisDeControle(indice);
-//    	for (int i = 0; i < sinaisDeControle.length; i++) {
-//    		for (int j = 0; j < sinaisDeControle[i].length(); j++)
-//	    		if (sinaisDeControle[i].charAt(j) == '1') {
-//	        		caminhos[ind] = barramento.getCaminhos(j);
-//	        		if ()
-//	    		}
-//	    	}
-//    	}
-    	int atual = 0;
+    public StringBuilder cicloDeExecucaoParaMostrarNaTela(Firmware firmware, Memoria memoria) {
     	StringBuilder builder = new StringBuilder();
-		int end = memoria.getLinha();
-		while (end > atual) {
-	    	String[] sinaisDeControle = firmware.getSinaisDeControleParaMostrarNaTela(indice, firmware, memoria);
+	    	String[] sinaisDeControle = firmware.getSinaisDeControleParaMostrarNaTela(firmware, memoria);
 	    	for (int i = 0; i < sinaisDeControle.length; i++) {
 	    		switch (sinaisDeControle[i]) {
 	    			case "00000000000000001010000000000000":
@@ -355,13 +338,11 @@ class Uc {
 			    		break;
 	    		}	
 	    	}
-	    	atual++;
-    	}
     	return builder;
     }
     
     public Object[][] cicloDeExecucao(Firmware firmware, int indice, int atual, Memoria memoria) {
-    	String[] sinaisDeControle = firmware.getSinaisDeControle(indice, this.ir);
+    	String[] sinaisDeControle = firmware.getSinaisDeControle(this.ir, false);
     	
     	if (atual >= sinaisDeControle.length) {
     		String binarioIr;
@@ -401,8 +382,6 @@ class Uc {
     		
     		return dados;
     	}
-		
-		System.out.println(sinaisDeControle[atual]);
    
 		switch (sinaisDeControle[atual]) {
 			case "00000000000000001010000000000000":
@@ -447,31 +426,36 @@ class Uc {
 	    		break;
 				
 			case "00100000000000100000000000000000":
-	    		this.mar = verificaSeEUmRegistrador(this.ir.getOperandoDois());
+				if (this.ir.op1eUmEndereco) {
+					memoria.novoProcessoSetandoEndereco(this.ir.getOperandoDois(), Integer.parseInt(this.ir.getOperandoUm(), 16));
+					this.mar = this.ir.getOperandoUm();
+				} else {
+		    		this.mar = Integer.toHexString(Integer.parseInt(this.ir.getOperandoDois(), 2));
+				}
 	    		break;
 
 			case "00000000000000000000010010000000":
 	    		memoria.setEnderecoTemporario(this.mar);
 	    		break;
 	    		
-//			case "00000000000000000000000101000000":
-//	    		this.mbr = memoria.getEnderecoTemporario();
-//	    		break;
+			case "00000000000000000000000101000000":
+	    		this.mbr = memoria.getProcesso(memoria.getEnderecoTemporario());
+	    		break;
 	    	
 			case "00001100000000000000000000000000":
-	    		this.ax = this.mbr.endereco;
+	    		this.ax = (String) this.mbr.dados;
 	    		break;
 	    		
 			case "00001001000000000000000000000000":
-	    		this.bx = this.mbr.endereco;
+	    		this.bx = (String) this.mbr.dados;
 	    		break;
 	    		
 			case "00001000010000000000000000000000":
-	    		this.cx = this.mbr.endereco;
+	    		this.cx = (String) this.mbr.dados;
 	    		break;
 	    		
 			case "00001000000100000000000000000000":
-	    		this.dx = this.mbr.endereco;
+	    		this.dx = (String) this.mbr.dados;
 	    		break;
 	    		
 			case "00000000000000100001000000010000":
