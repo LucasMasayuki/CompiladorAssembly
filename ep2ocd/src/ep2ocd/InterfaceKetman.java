@@ -1,7 +1,9 @@
 package ep2ocd;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
@@ -11,8 +13,10 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.RootPaneContainer;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,6 +44,8 @@ public class InterfaceKetman extends JFrame {
 	private int theend = 0;
 	private boolean busca = true;
 	private DefaultTableModel model;
+	private int indicaFim = 0;
+	private int end = 0;
 
 	/**
 	 * Create the frame.
@@ -75,18 +81,18 @@ public class InterfaceKetman extends JFrame {
 			}
 		});
 
-		textField.setBounds(87, 432, 424, 20);
+		textField.setBounds(87, 396, 424, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel(
 					"<html><center>Bem vindo usuario ao compilador Assembly.</center> <br><br> "
-					+ "<center>Comece colocando um comando por vez, apertando enter ao final de cada comando</center><br><br>"
-					+ "<center>voce vera no painel ao lado cada comando que voce digitou. </center><br><br> "
-					+ "<center>Ao finalizar de colocar todos os comandos que voce deseja,</center><br><br>"
-					+ "<center>aperte o botao executar abaixo para que os comandos sejam executados</center></html>"
+					+ "<center> 1 - Comece colocando um comando por vez, apertando enter ao final de cada comando</center><br><br>"
+					+ "<center>Voce vera no painel ao lado cada comando que voce digitou. </center><br><br> "
+					+ "<center> 2 - Ao finalizar de inserir todos os comandos que voce deseja,</center><br><br>"
+					+ "<center>Aperte o botao executar abaixo para que os comandos sejam executados</center></html>"
 				);
-		lblNewLabel.setBounds(12, 99, 592, 225);
+		lblNewLabel.setBounds(87, 97, 424, 225);
 		contentPane.add(lblNewLabel);
 		
 		JButton btnExecutar = new JButton("Executar");
@@ -114,7 +120,7 @@ public class InterfaceKetman extends JFrame {
 	}
 	
 	private void microperacoes() {
-		int end = memoria.getLinha();
+		end = memoria.getLinha();
 		Object[][] dados = {
 			{"pc" , 0},
 			{"ir" , "0"},
@@ -138,14 +144,13 @@ public class InterfaceKetman extends JFrame {
 
 		model = new DefaultTableModel(dados, coluna);
 
-		JLabel lblNewLabel = new JLabel("<html><center>Aperte enter a cada linha.</center> <br><br>" 
+		JLabel lblNewLabel = new JLabel("<html><center>Vá apertando enter no campo ao lado.</center> <br><br>" 
 			+ "<center>Veja na tabela os valores mudarem</center><br><br>"
-			+ "<center><b>Atencao nao pule as linhas.</b></center><br>"
-			+ "<center><b>Atencao tempos iguais acontecem ao mesmo tempo,<br> tome cuidado para nao apertar duas vezes em dois tempos iguais.</b></center><br>"
-			+ "<center><b>Atencao voce precisara utilizar o mouse para ir pra proxima linha.</b></center><br></html>"
+			+ "<center><b>Atencao tempos iguais acontecem ao mesmo tempo.</center><br>"
+			+ "<center><b>Quando for t1 sera relacionado com um ciclo novo</center><br></html>"
 		);
 
-		lblNewLabel.setBounds(93, 222, 250, 150);
+		lblNewLabel.setBounds(87, 97, 424, 225);
 		contentPane.add(lblNewLabel);
 		JLabel lbl2 = new JLabel();
 		lbl2.setBounds(12, 67, 412, 283);
@@ -157,7 +162,7 @@ public class InterfaceKetman extends JFrame {
 		table.getColumnModel().getColumn(1).setPreferredWidth(228);
 		table.setBorder(new LineBorder(new Color(0, 0, 0)));
 		table.setEnabled(false);
-		table.setBounds(28, 450, 424, 160);
+		table.setBounds(70, 450, 424, 160);
 		
 		txtpnA = new JTextPane();
 
@@ -166,38 +171,54 @@ public class InterfaceKetman extends JFrame {
 			public void keyPressed(KeyEvent e) {
 
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					if (busca) {
-						if (atual > 3) {
-							busca = false;
-							atual = 0;
+					if (indicaFim < end + 1) {
+						if (busca) {
+							if (atual > 3) {
+								busca = false;
+								atual = 0;
+								indicaFim++;
+							} else {
+								Object resposta[][] = uc.cicloDeBusca(firmware, memoria, atual);
+								reset();
+								String[] coluna = {"Componente", "valor"};
+								model = new DefaultTableModel(resposta, coluna);
+								table.setModel(model);
+								atual++;
+							}
 						} else {
-							Object resposta[][] = uc.cicloDeBusca(firmware, memoria, atual);
-							reset();
-							String[] coluna = {"Componente", "valor"};
-							model = new DefaultTableModel(resposta, coluna);
-							table.setModel(model);
+							int indice = 0;
+							indice = Integer.parseInt(uc.getIr().getOpcode(), 2);
+		
+							theend = firmware.tamanhoSinal(indice);
+							
+							if (theend != atual) {
+								Object resposta[][] = uc.cicloDeExecucao(firmware, indice, atual, memoria);
+		
+								reset();
+								String[] coluna = {"Componente", "valor"};
+								model = new DefaultTableModel(resposta, coluna);
+								table.setModel(model);
+								atual++;
+							} else {
+								atual = 0;
+								busca = true;
+								indicaFim++;
+							}
 						}
 					} else {
-						int indice = 0;
-						indice = Integer.parseInt(uc.getIr().getOpcode(), 2);
-						System.out.println(indice);
-
-						theend = firmware.tamanhoSinal(indice);
-						
-						if (theend != atual) {
-							Object resposta[][] = uc.cicloDeExecucao(firmware, indice, atual, memoria);
-
-							reset();
-							String[] coluna = {"Componente", "valor"};
-							model = new DefaultTableModel(resposta, coluna);
-							table.setModel(model);
-						} else {
-							atual = 0;
-							busca = true;
-						}
+						JFrame warning = new JFrame();
+						warning.setSize(300, 300);
+				        warning.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				        warning.setVisible(true);
+				        contentPane = new JPanel();
+						contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+						warning.setContentPane(contentPane);
+						contentPane.setLayout(null);
+						JLabel lblNewLabel = new JLabel("<html><center>Acabou o programa, reinicie para comecar de novo.</center></html>"
+							);
+						lblNewLabel.setBounds(100, 70, 70, 100);
+						contentPane.add(lblNewLabel);
 					}
-
-					atual++;
 					e.consume();
 				} else {
 					e.consume();

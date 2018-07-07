@@ -77,6 +77,11 @@ class Firmware {
             "00000000000000000000000101000000",
             "00001000000100000000000000000000"
         },
+        // Comando mov endereço, registrador
+        {
+            "00100000000000100000000000000000",
+            "00000000000000000000010010000000"
+        },
     	// Comando sub ax,(numero/registrador)***
     	{
     		"00000000000000001010000000000000", 
@@ -201,39 +206,42 @@ class Firmware {
     	if (indice ==  0) {
     		return sinaisDeControle[indice];
     	}
-
-    	System.out.print(indice);
-
-    	if (ir.getOpcode() == "add") {
-    		indice += Integer.parseInt(ir.getOperandoUm(), 2);
-    		// como diferenciar numeros de enderecos
-    	} else if (ir.getOpcode() == "mov") {
-    		indice += 4;
-    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
+ 
+    	if (ir.getOpcode().equals("1")) {
+    		indice += Integer.parseInt(ir.getOperandoUm(), 2) - 1;
+    	} else if (ir.getOpcode().equals("10")) {
+    		indice += 3;
+    		if (ir.op1eUmRegistrador) {
     			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    			if (ir.op2eUmEndereco) {
+    				indice++;
+        			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    			}
+    		} else if (ir.op1eUmEndereco) {
+    			indice += 11;
     		}
-    	} else if (ir.getOpcode() == "sub") {
+    	} else if (ir.getOpcode().equals("11")) {
     		indice += 10;
-    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
+    		if (ir.op1eUmRegistrador) {
     			indice += Integer.parseInt(ir.getOperandoUm(), 2);
     		}
-    	} else if (ir.getOpcode() == "mul") {
+    	} else if (ir.getOpcode().equals("100")) {
     		indice += 14;
-    	} else if (ir.getOpcode() == "div") {
+    	} else if (ir.getOpcode().equals("101")) {
     		indice += 15;
-    	} else if (ir.getOpcode() == "inc") {
+    	} else if (ir.getOpcode().equals("111")) {
     		indice += 16;
-    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
+    		if (ir.op1eUmRegistrador) {
     			indice += Integer.parseInt(ir.getOperandoUm(), 2);
     		}
-    	} else if (ir.getOpcode() == "dec") {
+    	} else if (ir.getOpcode().equals("1000")) {
     		indice += 20;
-    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
+    		if (uc.verificaPeloOpcode(ir.getOperandoUm())) {
     			indice += Integer.parseInt(ir.getOperandoUm(), 2);
     		}
-    	} else if (ir.getOpcode() == "cmp") {
+    	} else if (ir.getOpcode().equals("110")) {
     		indice += 24;
-    	} else if (ir.getOpcode() == "jmp") {
+    	} else if (ir.getOpcode().equals("1001")) {
     		indice += 25;
     	}
 

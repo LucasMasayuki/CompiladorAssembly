@@ -44,20 +44,54 @@ class Ula {
     	return this.tipo;
     }
 
-    public int getResultado() {
+    public String getResultado() {
 		int xDecimal = Integer.parseInt(this.X, 2);
 		int yDecimal = Integer.parseInt(this.Y, 2);
     	if (operacao.get(this.tipo).equals("++") || operacao.get(this.tipo).equals("adicao")) {
-            return xDecimal + yDecimal;
+            return Integer.toBinaryString(xDecimal + yDecimal);
     	} else if (operacao.get(this.tipo).equals("--") || operacao.get(this.tipo).equals("subtracao")) {
-            return xDecimal - yDecimal;
+            return Integer.toBinaryString(xDecimal - yDecimal);
     	} else if (operacao.get(this.tipo).equals("multiplicacao")) {
-            return xDecimal * yDecimal;
+            return Integer.toBinaryString(xDecimal * yDecimal);
     	} else if (operacao.get(this.tipo).equals("divsao")) {
-            return xDecimal / yDecimal;
-    	} else if (operacao.get(this.tipo).equals("comparacao")) {
+            return Integer.toBinaryString(xDecimal / yDecimal);
+    	}
+    	return "";
+    }
+    
+    public int[] getFlagCodition() {
+    	int[] vetor =  {
+    		0,
+    		0,
+    		0,
+    		0,
+    		0,
+    		0,
+    	};
+  
+		int xDecimal = Integer.parseInt(this.X, 2);
+		int yDecimal = Integer.parseInt(this.Y, 2);
+    	if (xDecimal > yDecimal) {
     		
     	}
-    	return 0;
+    	if (xDecimal > yDecimal) {
+    		vetor[4] = 1;
+    	}
+    	if (xDecimal >= yDecimal) {
+    		vetor[5] = 1;
+    	}
+    	if (xDecimal < yDecimal) {
+    		vetor[2] = 1;
+    	}
+    	if (xDecimal <= yDecimal) {
+    		vetor[3] = 1;
+    	}
+    	if (xDecimal == yDecimal) {
+    		vetor[0] = 1;
+    	}
+    	if (xDecimal != yDecimal) {
+    		vetor[1] = 1;
+    	}
+    	return vetor;
     }
 }

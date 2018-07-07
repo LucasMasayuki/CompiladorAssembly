@@ -35,16 +35,18 @@ class InterpretadorAssembly {
             i++;
         }
         
-        boolean eUmRegistrador = false;
-        boolean eEndereco = false;
+        boolean op1eUmRegistrador = false;
+        boolean op2eUmRegistrador = false;
+        boolean op1eUmEndereco = false;
+        boolean op2eUmEndereco = false;
 
         if (uc.verificaSeUmRegistradorValido(instrucao.toString())) {
             operandoUm = uc.getComandoBinario(instrucao.toString());
-            eUmRegistrador = true;
+            op1eUmRegistrador = true;
         } else {
         	if (instrucao.charAt(0) == '[') {
             	converte = (int) Long.parseLong(instrucao.toString().substring(1,instrucao.length() - 1), 16);
-            	eEndereco = true;
+            	op1eUmEndereco = true;
         	} else {
         		converte = (int) Long.parseLong(instrucao.toString(), 16);
         	}
@@ -54,7 +56,7 @@ class InterpretadorAssembly {
         instrucao = new StringBuilder();
 
         if (comando.length() == i) {
-            palavra = new Palavra(opcode, operandoUm, eUmRegistrador, eEndereco);
+            palavra = new Palavra(opcode, operandoUm, op1eUmRegistrador, op1eUmEndereco);
         } else {
             while (comando.length() != i){
                 instrucao.append(comando.charAt(i));
@@ -63,17 +65,18 @@ class InterpretadorAssembly {
 
             if (uc.verificaSeUmRegistradorValido(instrucao.toString())) {
             	operandoDois = uc.getComandoBinario(instrucao.toString());
+            	op2eUmRegistrador = true;
             } else {
             	if (instrucao.charAt(0) == '[') {
                 	converte = (int) Long.parseLong(instrucao.toString().substring(1,instrucao.length() - 1), 16);
-                	eEndereco = true;
+                	op2eUmEndereco = true;
             	} else {
                 	converte = (int) Long.parseLong(instrucao.toString(), 16);
             	}
             	operandoDois = Integer.toString(converte, 2);
             }
 
-            palavra = new Palavra(opcode, operandoUm, operandoDois, eUmRegistrador, eEndereco);
+            palavra = new Palavra(opcode, operandoUm, operandoDois, op1eUmRegistrador, op1eUmEndereco, op2eUmEndereco, op2eUmRegistrador);
         }
 
         memoria.novoProcesso(palavra);
