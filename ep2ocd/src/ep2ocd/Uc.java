@@ -469,7 +469,7 @@ class Uc {
 	    		
 			case "00000000000000001010000000100000":
 	    		ula.setX(verificaSeEUmRegistrador(this.ir.getOperandoUm()));
-	    		ula.setTipo("010");
+	    		ula.setTipo("100");
 	    		break;
 	    		
 			case "00000000000000001010000000011000":
@@ -479,11 +479,13 @@ class Uc {
 	    		
 			case "00000000000000001010000000101000":
 	    		ula.setX(verificaSeEUmRegistrador(this.ir.getOperandoUm()));
+	    		ula.setY(Integer.toBinaryString(1));
 	    		ula.setTipo("101");
 	    		break;
 	    		
 			case "00000000000000001010000000110000":
 	    		ula.setX(verificaSeEUmRegistrador(this.ir.getOperandoUm()));
+	    		ula.setY(Integer.toBinaryString(1));
 	    		ula.setTipo("110");
 	    		break;
 	    		
