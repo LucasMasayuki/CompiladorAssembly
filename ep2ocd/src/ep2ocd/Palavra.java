@@ -1,9 +1,9 @@
 package ep2ocd;
 
 public class Palavra {
-	private String opcode;
-	private String operandoUm;
-	private String operandoDois;
+	private String opcode = "";
+	private String operandoUm = "";
+	private String operandoDois = "";
 	boolean op1eUmRegistrador = false;
 	boolean op2eUmRegistrador = false;
     boolean op1eUmEndereco = false;
