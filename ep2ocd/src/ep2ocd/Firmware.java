@@ -218,7 +218,7 @@ class Firmware {
         			indice += Integer.parseInt(ir.getOperandoUm(), 2);
     			}
     		} else if (ir.op1eUmEndereco) {
-    			indice += 11;
+    			indice += 13;
     		}
     	} else if (ir.getOpcode().equals("11")) {
     		indice += 14;

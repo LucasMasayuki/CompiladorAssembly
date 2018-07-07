@@ -33,6 +33,7 @@ public class InterfaceKetman extends JFrame {
 	private static InterfaceKetman frame;
 	private Firmware firmware= new Firmware();
 	private JTable table;
+	private JTable memTable;
 	private int atual = 0;
 	private int theend = 0;
 	private boolean busca = true;
@@ -148,14 +149,34 @@ public class InterfaceKetman extends JFrame {
 		JLabel lbl2 = new JLabel();
 		lbl2.setBounds(12, 67, 412, 283);
 		contentPane.add(lbl2);
+		
+		JLabel lblregister = new JLabel("<html><center>Registradores</center> <br><br></html>" 
+			);
 
+		lblregister.setBounds(150, 280, 240, 200);
+		contentPane.add(lblregister);
 		table = new JTable(model);
 		contentPane.add(table);
-		table.getColumnModel().getColumn(0).setPreferredWidth(319);
-		table.getColumnModel().getColumn(1).setPreferredWidth(228);
 		table.setBorder(new LineBorder(new Color(0, 0, 0)));
 		table.setEnabled(false);
-		table.setBounds(70, 450, 424, 160);
+		table.setBounds(70, 380, 240, 200);
+		
+		Object[][] mem = memoria.getEstadoDaMemoria();
+		
+		String[] column = {"endereco", "dados"};
+		
+		DefaultTableModel modelo = new DefaultTableModel(mem, column);
+		
+		JLabel lblmemory = new JLabel("<html><center>Memoria</center> <br><br></html>" 
+				);
+		lblmemory.setBounds(450, 280, 150, 200);
+		contentPane.add(lblmemory);
+		
+		memTable = new JTable(modelo);
+		contentPane.add(memTable);
+		memTable.setBorder(new LineBorder(new Color(0, 0, 0)));
+		memTable.setEnabled(false);
+		memTable.setBounds(400, 380, 150, 200);
 		
 		txtpnA = new JTextPane();
 
@@ -190,6 +211,12 @@ public class InterfaceKetman extends JFrame {
 								String[] coluna = {"Componente", "valor"};
 								model = new DefaultTableModel(resposta, coluna);
 								table.setModel(model);
+		
+								Object[][] mem = memoria.getEstadoDaMemoria();
+								String[] column = {"endereco", "dados"};
+
+								DefaultTableModel modelo = new DefaultTableModel(mem, column);
+								memTable.setModel(modelo);
 								atual++;
 							} else {
 								atual = 0;
