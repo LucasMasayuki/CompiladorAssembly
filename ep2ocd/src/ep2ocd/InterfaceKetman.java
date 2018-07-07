@@ -159,7 +159,7 @@ public class InterfaceKetman extends JFrame {
 		contentPane.add(table);
 		table.setBorder(new LineBorder(new Color(0, 0, 0)));
 		table.setEnabled(false);
-		table.setBounds(70, 380, 240, 200);
+		table.setBounds(70, 380, 240, 270);
 		
 		Object[][] mem = memoria.getEstadoDaMemoria();
 		
@@ -176,7 +176,7 @@ public class InterfaceKetman extends JFrame {
 		contentPane.add(memTable);
 		memTable.setBorder(new LineBorder(new Color(0, 0, 0)));
 		memTable.setEnabled(false);
-		memTable.setBounds(400, 380, 150, 200);
+		memTable.setBounds(400, 380, 150, 270);
 		
 		txtpnA = new JTextPane();
 

@@ -236,8 +236,8 @@ class Firmware {
     		}
     	} else if (ir.getOpcode().equals("1000")) {
     		indice += 24;
-    		if (uc.verificaPeloOpcode(ir.getOperandoUm())) {
-    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    		if (ir.op1eUmRegistrador) {
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2) - 1;
     		}
     	} else if (ir.getOpcode().equals("110")) {
     		indice += 28;
