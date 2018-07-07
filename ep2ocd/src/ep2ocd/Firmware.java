@@ -77,6 +77,11 @@ class Firmware {
             "00000000000000000000000101000000",
             "00001000000100000000000000000000"
         },
+        // Comando mov endereço, registrador
+        {
+            "00100000000000100000000000000000",
+            "00000000000000000000010010000000"
+        },
     	// Comando sub ax,(numero/registrador)***
     	{
     		"00000000000000001010000000000000", 
@@ -196,53 +201,68 @@ class Firmware {
     };
     private Uc uc = new Uc();
 
-    public String[] getSinaisDeControle(int indice, Palavra ir) {
-
-    	if (indice ==  0) {
-    		return sinaisDeControle[indice];
+    public String[] getSinaisDeControle(Palavra ir, boolean busca) {
+    	int indice = 0;
+    	if (busca) {
+    		return sinaisDeControle[0];
     	}
-
-    	System.out.print(indice);
-
-    	if (ir.getOpcode() == "add") {
+ 
+    	if (ir.getOpcode().equals("1")) {
     		indice += Integer.parseInt(ir.getOperandoUm(), 2);
-    		// como diferenciar numeros de enderecos
-    	} else if (ir.getOpcode() == "mov") {
-    		indice += 4;
-    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
-    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    	} else if (ir.getOpcode().equals("10")) {
+    		indice += 5;
+    		if (ir.op1eUmRegistrador) {
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2) - 1;
+    			if (ir.op2eUmEndereco) {
+    				indice++;
+        			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    			}
+    		} else if (ir.op1eUmEndereco) {
+    			indice += 11;
     		}
-    	} else if (ir.getOpcode() == "sub") {
-    		indice += 10;
-    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
-    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
-    		}
-    	} else if (ir.getOpcode() == "mul") {
+    	} else if (ir.getOpcode().equals("11")) {
     		indice += 14;
-    	} else if (ir.getOpcode() == "div") {
-    		indice += 15;
-    	} else if (ir.getOpcode() == "inc") {
-    		indice += 16;
-    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
-    			indice += Integer.parseInt(ir.getOperandoUm(), 2);
+    		if (ir.op1eUmRegistrador) {
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2) - 1;
     		}
-    	} else if (ir.getOpcode() == "dec") {
+    	} else if (ir.getOpcode().equals("100")) {
+    		indice += 18;
+    	} else if (ir.getOpcode().equals("101")) {
+    		indice += 19;
+    	} else if (ir.getOpcode().equals("111")) {
     		indice += 20;
-    		if (uc.verificaSeUmRegistradorValido(ir.getOperandoUm())) {
+    		if (ir.op1eUmRegistrador) {
+    			indice += Integer.parseInt(ir.getOperandoUm(), 2) - 1;
+    		}
+    	} else if (ir.getOpcode().equals("1000")) {
+    		indice += 24;
+    		if (uc.verificaPeloOpcode(ir.getOperandoUm())) {
     			indice += Integer.parseInt(ir.getOperandoUm(), 2);
     		}
-    	} else if (ir.getOpcode() == "cmp") {
-    		indice += 24;
-    	} else if (ir.getOpcode() == "jmp") {
-    		indice += 25;
+    	} else if (ir.getOpcode().equals("110")) {
+    		indice += 28;
+    	} else if (ir.getOpcode().equals("1001")) {
+    		indice += 29;
+    	} else if (ir.getOpcode().equals("1010")) {
+    		indice += 30;
+    	} else if (ir.getOpcode().equals("1011")) {
+    		indice += 31;
+    	} else if (ir.getOpcode().equals("1100")) {
+    		indice += 32;
+    	} else if (ir.getOpcode().equals("1101")) {
+    		indice += 33;
+    	} else if (ir.getOpcode().equals("1110")) {
+    		indice += 34;
+    	} else if (ir.getOpcode().equals("1111")) {
+    		indice += 35;
     	}
 
         return this.sinaisDeControle[indice];
     }
     
-    public String[] getSinaisDeControleParaMostrarNaTela(int indice, Firmware firmware, Memoria memoria) {
+    public String[] getSinaisDeControleParaMostrarNaTela(Firmware firmware, Memoria memoria) {
     	uc.cicloDeBuscaDireto(firmware, memoria);
-    	return getSinaisDeControle(indice, uc.getIr());
+    	return getSinaisDeControle(uc.getIr(), false);
     }
     
     public int tamanhoSinal(int indice) {

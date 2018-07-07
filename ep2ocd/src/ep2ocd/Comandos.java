@@ -12,6 +12,7 @@ class Comandos {
         "div",
         "cmp",
         "inc",
+        "dec",
         "jmp",
         "je",
         "jne",

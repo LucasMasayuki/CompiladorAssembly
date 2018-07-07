@@ -4,22 +4,27 @@ public class Palavra {
 	private String opcode;
 	private String operandoUm;
 	private String operandoDois;
-	private boolean eUmRegistrador;
-	private boolean eUmEndereco;
+	boolean op1eUmRegistrador = false;
+	boolean op2eUmRegistrador = false;
+    boolean op1eUmEndereco = false;
+	boolean op2eUmEndereco = false;
 
-	public Palavra(String opcode, String operandoUm, boolean eUmRegistrador, boolean eUmEndereco) {
+	public Palavra(String opcode, String operandoUm, boolean op1eUmRegistrador, boolean op1eUmEndereco) {
 		this.opcode = opcode;
 		this.operandoUm = operandoUm;
-		this.eUmRegistrador = eUmRegistrador;
-		this.eUmEndereco = eUmEndereco;
+		this.op1eUmRegistrador = op1eUmRegistrador;
+		this.op1eUmEndereco = op1eUmEndereco;
+        System.out.println(op1eUmRegistrador);
 	}
 	
-	public Palavra(String opcode, String operandoUm, String operandoDois, boolean eUmRegistrador, boolean eUmEndereco) {
+	public Palavra(String opcode, String operandoUm, String operandoDois, boolean op1eUmRegistrador, boolean op1eUmEndereco, boolean op2eUmEndereco, boolean op2eUmRegistrador) {
 		this.opcode = opcode;
 		this.operandoUm = operandoUm;
 		this.operandoDois = operandoDois;
-		this.eUmRegistrador = eUmRegistrador;
-		this.eUmEndereco = eUmEndereco;
+		this.op1eUmRegistrador = op1eUmRegistrador;
+		this.op1eUmEndereco = op1eUmEndereco;
+		this.op2eUmRegistrador = op2eUmRegistrador;
+		this.op2eUmEndereco = op2eUmEndereco;
 	}
 
 	public String getOpcode() {
@@ -41,14 +46,6 @@ public class Palavra {
 			return "";
 		}
 		return this.operandoDois;
-	}
-	
-	public boolean getEUmRegistrador() {
-		return this.eUmRegistrador;
-	}	
-
-	public boolean getEUmEndereco() {
-		return this.eUmEndereco;
 	}
 	
 	public String getPalavraCompleta() {
