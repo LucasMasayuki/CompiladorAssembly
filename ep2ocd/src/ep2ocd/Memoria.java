@@ -29,6 +29,21 @@ class Memoria {
     	}
     	return null;
     }
+    
+    public Object[][] getEstadoDaMemoria() {
+    	Object[][] mem = new Object[linha][2];
+    	int i = 0;
+    	for (Processo processo : filaDeProcesso) {
+    		mem[i][0] = processo.endereco;
+    		if (processo.dados instanceof Palavra) {
+    			mem[i][1] = ((Palavra) processo.dados).getPalavraCompleta();
+        	} else {
+    			mem[i][1] = ((String) processo.dados);
+        	}
+    		i++;
+    	}
+    	return mem;
+    }
 
     public int getLinha() {
         return this.linha;
