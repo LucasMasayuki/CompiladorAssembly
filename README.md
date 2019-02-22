@@ -1,2 +1,3 @@
-# ep2ocd
-ep2
+# Assembly Compiler
+
+**Implementação de um simulador de interpretador assembly**
